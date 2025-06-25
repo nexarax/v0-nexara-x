@@ -1,5 +1,8 @@
 import { supabaseAdmin } from "./supabase-client"
-import { PRICING_TIERS, type PricingTier } from "./pricing-config"
+import { PRICING_TIERS } from "./pricing-config"
+
+// Define the PricingTier type based on the keys of PRICING_TIERS
+export type PricingTier = keyof typeof PRICING_TIERS
 
 export interface UserUsage {
   userId: string
@@ -36,7 +39,7 @@ export class UsageTracker {
       }
 
       const tierConfig = PRICING_TIERS[tier as PricingTier]
-      const limit = tierConfig.features.aiPosts
+      const limit = tierConfig?.features?.aiPosts || 0
       const totalUsed = currentUsage.text_posts + currentUsage.images + currentUsage.videos
 
       const withinLimits = limit === "unlimited" || totalUsed < (typeof limit === "number" ? limit : 999999)
@@ -67,12 +70,15 @@ export class UsageTracker {
     const currentMonth = new Date().toISOString().slice(0, 7)
 
     try {
+      const columnName = type === "text" ? "text_posts" : 
+                        type === "image" ? "images" : 
+                        type === "video" ? "videos" : "voice_minutes"
+
       const { error } = await supabaseAdmin.from("usage_tracking").upsert(
         {
           user_id: userId,
           month_year: currentMonth,
-          [`${type === "text" ? "text_posts" : type === "image" ? "images" : type === "video" ? "videos" : "voice_minutes"}`]:
-            amount,
+          [columnName]: amount,
         },
         {
           onConflict: "user_id,month_year",
