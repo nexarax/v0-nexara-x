@@ -10,8 +10,24 @@ export default function PricingPage() {
   const tiers = Object.entries(PRICING_TIERS).map(([key, tier]) => ({
     ...tier,
     id: key,
-    popular: key === "pro" // Set Pro as popular
+    popular: key === "pro", // Set Pro as popular
+    description: getDescription(key) // Add description based on tier
   }))
+
+  function getDescription(tierId: string) {
+    switch (tierId) {
+      case "free":
+        return "Perfect for getting started"
+      case "starter":
+        return "For growing creators"
+      case "pro":
+        return "For serious creators"
+      case "enterprise":
+        return "For teams & agencies"
+      default:
+        return "Get started today"
+    }
+  }
 
   const getButtonStyle = (tierId: string) => {
     switch (tierId) {
@@ -25,6 +41,21 @@ export default function PricingPage() {
         return "bg-gray-900 text-white hover:bg-gray-800"
       default:
         return "bg-blue-600 text-white hover:bg-blue-700"
+    }
+  }
+
+  const getButtonText = (tierId: string) => {
+    switch (tierId) {
+      case "free":
+        return "Start Free"
+      case "starter":
+        return "Choose Starter"
+      case "pro":
+        return "Choose Pro"
+      case "enterprise":
+        return "Contact Sales"
+      default:
+        return "Get Started"
     }
   }
 
@@ -179,7 +210,7 @@ export default function PricingPage() {
                 {/* CTA Button */}
                 <div className="pt-6">
                   <Button className={`w-full ${getButtonStyle(tier.id)}`} size="lg">
-                    {tier.cta}
+                    {getButtonText(tier.id)}
                   </Button>
                 </div>
               </CardContent>
