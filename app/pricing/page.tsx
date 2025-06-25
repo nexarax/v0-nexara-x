@@ -3,14 +3,17 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check, Star } from "lucide-react"
+import { Check, Star } from 'lucide-react'
 import { PRICING_TIERS } from "@/lib/pricing-config"
 
 export default function PricingPage() {
-  const tiers = Object.values(PRICING_TIERS)
+  const tiers = Object.entries(PRICING_TIERS).map(([key, tier]) => ({
+    ...tier,
+    id: key
+  }))
 
-  const getButtonStyle = (tier: any) => {
-    switch (tier.id) {
+  const getButtonStyle = (tierId: string) => {
+    switch (tierId) {
       case "free":
         return "bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300"
       case "starter":
@@ -22,12 +25,6 @@ export default function PricingPage() {
       default:
         return "bg-blue-600 text-white hover:bg-blue-700"
     }
-  }
-
-  const formatFeatureValue = (value: any) => {
-    if (value === "unlimited") return "Unlimited"
-    if (typeof value === "number") return value.toLocaleString()
-    return value
   }
 
   return (
@@ -180,7 +177,7 @@ export default function PricingPage() {
 
                 {/* CTA Button */}
                 <div className="pt-6">
-                  <Button className={`w-full ${getButtonStyle(tier)}`} size="lg">
+                  <Button className={`w-full ${getButtonStyle(tier.id)}`} size="lg">
                     {tier.cta}
                   </Button>
                 </div>
