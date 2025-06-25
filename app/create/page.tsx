@@ -19,15 +19,14 @@ export default function CreatePage() {
   const [userEmail, setUserEmail] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
-  // Email validation check - Fixed for SSR
+  // Email validation check - Check for verified email
   useEffect(() => {
-    // Only run on client side
     if (typeof window !== 'undefined') {
-      const emailValidated = sessionStorage.getItem("nexarax_email_validated")
+      const emailVerified = sessionStorage.getItem("nexarax_email_verified")
       const email = sessionStorage.getItem("nexarax_user_email")
       
-      if (!emailValidated || !email) {
-        // Redirect to get-started if no validated email
+      if (!emailVerified || !email) {
+        // Redirect to get-started if email not verified
         router.push("/get-started")
         return
       }
