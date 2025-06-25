@@ -1,35 +1,47 @@
 import { supabaseAdmin } from "./supabase"
-import { PRICING_TIERS, type PricingTier } from "./pricing-config"
+import { PRICING_TIERS } from "./pricing-config"
+
+// Define the PricingTier type based on the keys of PRICING_TIERS
+export type PricingTier = keyof typeof PRICING_TIERS
 
 export class UsageTracker {
   static async checkLimits(userId: string, tier: string) {
     const currentMonth = new Date().toISOString().slice(0, 7) // YYYY-MM
 
-    // Get current usage
-    const { data: usage } = await supabaseAdmin
-      .from("usage_tracking")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("month_year", currentMonth)
-      .single()
+    try {
+      // Get current usage
+      const { data: usage } = await supabaseAdmin
+        .from("usage_tracking")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("month_year", currentMonth)
+        .single()
 
-    const currentUsage = usage || {
-      text_posts: 0,
-      images: 0,
-      videos: 0,
-      voice_minutes: 0,
-    }
+      const currentUsage = usage || {
+        text_posts: 0,
+        images: 0,
+        videos: 0,
+        voice_minutes: 0,
+      }
 
-    const tierConfig = PRICING_TIERS[tier as PricingTier]
-    const limit = tierConfig.features.aiPosts
-    const totalUsed = currentUsage.text_posts + currentUsage.images + currentUsage.videos
+      const tierConfig = PRICING_TIERS[tier as PricingTier]
+      const limit = tierConfig?.features?.aiPosts || 0
+      const totalUsed = currentUsage.text_posts + currentUsage.images + currentUsage.videos
 
-    const withinLimits = limit === "unlimited" || totalUsed < limit
+      const withinLimits = limit === "unlimited" || totalUsed < (typeof limit === "number" ? limit : 999999)
 
-    return {
-      withinLimits,
-      usage: currentUsage,
-      recommendedTier: withinLimits ? null : this.getNextTier(tier as PricingTier),
+      return {
+        withinLimits,
+        usage: currentUsage,
+        recommendedTier: withinLimits ? null : this.getNextTier(tier as PricingTier),
+      }
+    } catch (error) {
+      console.error("Usage check error:", error)
+      return {
+        withinLimits: true,
+        usage: { text_posts: 0, images: 0, videos: 0, voice_minutes: 0 },
+        recommendedTier: null,
+      }
     }
   }
 
@@ -42,17 +54,26 @@ export class UsageTracker {
   static async incrementUsage(userId: string, type: "text" | "image" | "video" | "voice", amount = 1) {
     const currentMonth = new Date().toISOString().slice(0, 7)
 
-    const { error } = await supabaseAdmin.from("usage_tracking").upsert(
-      {
-        user_id: userId,
-        month_year: currentMonth,
-        [`${type}_posts`]: amount,
-      },
-      {
-        onConflict: "user_id,month_year",
-      },
-    )
+    try {
+      const columnName = type === "text" ? "text_posts" : 
+                        type === "image" ? "images" : 
+                        type === "video" ? "videos" : "voice_minutes"
 
-    return !error
+      const { error } = await supabaseAdmin.from("usage_tracking").upsert(
+        {
+          user_id: userId,
+          month_year: currentMonth,
+          [columnName]: amount,
+        },
+        {
+          onConflict: "user_id,month_year",
+        },
+      )
+
+      return !error
+    } catch (error) {
+      console.error("Usage increment error:", error)
+      return false
+    }
   }
 }
