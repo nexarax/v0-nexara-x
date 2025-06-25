@@ -1,117 +1,147 @@
-// VERSION 228 RESTORED - Simpler layout without complex tabs
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, Rocket, Star, Check, ArrowRight, Play } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { Zap, Users, BarChart3, Palette, Check, Star } from 'lucide-react'
+import Link from "next/link"
 
 export default function HomePage() {
-  const router = useRouter()
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <header className="border-b bg-white/90 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                NexaraX
+              </span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              NexaraX
-            </span>
+            <nav className="hidden md:flex space-x-8">
+              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Features
+              </a>
+              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Pricing
+              </a>
+              <Link href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Contact
+              </Link>
+            </nav>
+            <div className="flex items-center space-x-4">
+              <Link href="/auth/signin">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/get-started">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">Get Started</Button>
+              </Link>
+            </div>
           </div>
-          <nav className="hidden md:flex items-center space-x-8">
-            <Button variant="ghost" onClick={() => router.push("/features")}>
-              Features
-            </Button>
-            <Button variant="ghost" onClick={() => router.push("/pricing")}>
-              Pricing
-            </Button>
-            <Button
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-              onClick={() => router.push("/create")}
-            >
-              Get Started
-            </Button>
-          </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center max-w-6xl">
-          <Badge className="mb-6 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border-blue-200">
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <Badge className="mb-4 bg-blue-100 text-blue-800 border-blue-200">
             🚀 AI-Powered Social Media Revolution
           </Badge>
-
-          <h1 className="text-6xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Create Viral Content
             <br />
             with AI Magic
           </h1>
-
-          <p className="text-xl md:text-2xl text-gray-700 mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Transform your social media presence with AI-powered content creation. Generate stunning images, videos, and
             posts that captivate your audience and drive engagement.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/get-started">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3">
+                <Zap className="w-5 h-5 mr-2" />
+                Start Creating Now - FREE
+              </Button>
+            </Link>
+            <a href="#features">
+              <Button size="lg" variant="outline" className="px-8 py-3">
+                <BarChart3 className="w-5 h-5 mr-2" />
+                See Features
+              </Button>
+            </a>
+          </div>
+        </div>
+      </section>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg"
-              onClick={() => router.push("/create")}
-            >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Start Creating Now - FREE
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-blue-200 hover:bg-blue-50 px-8 py-4 text-lg"
-              onClick={() => router.push("/features")}
-            >
-              <Play className="w-5 h-5 mr-2" />
-              See Features
-            </Button>
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Go Viral</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Powerful AI tools designed to help creators, businesses, and influencers dominate social media.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="border-2 hover:border-blue-200 transition-colors">
+              <CardHeader>
+                <Palette className="w-10 h-10 text-blue-600 mb-2" />
+                <CardTitle>AI Image Generation</CardTitle>
+                <CardDescription>Create stunning visuals with advanced AI that understands your brand</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-2 hover:border-purple-200 transition-colors">
+              <CardHeader>
+                <Zap className="w-10 h-10 text-purple-600 mb-2" />
+                <CardTitle>AI Video Creation</CardTitle>
+                <CardDescription>Generate engaging videos that capture attention and drive engagement</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-2 hover:border-green-200 transition-colors">
+              <CardHeader>
+                <Users className="w-10 h-10 text-green-600 mb-2" />
+                <CardTitle>Multi-Platform Publishing</CardTitle>
+                <CardDescription>
+                  Post to all your social platforms with one click and optimal formatting
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 px-4 bg-white/50">
-        <div className="container mx-auto max-w-7xl">
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-6 bg-gradient-to-r from-green-100 to-blue-100 text-green-800 border-green-200">
-              💎 Choose Your Plan
-            </Badge>
-            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <Badge className="mb-4 bg-green-100 text-green-800 border-green-200">💰 Choose Your Plan</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Pricing That Scales With You
             </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600">
               Start free and upgrade as you grow. All plans include our core AI features.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Free Plan */}
+            {/* Free Trial */}
             <Card className="border-2 border-gray-200 hover:border-blue-300 transition-colors">
               <CardHeader className="text-center pb-2">
-                <CardTitle className="text-2xl">Free</CardTitle>
-                <div className="text-4xl font-bold text-gray-900 mb-2">£0</div>
-                <CardDescription>Perfect for getting started</CardDescription>
+                <CardTitle className="text-2xl">Free Trial</CardTitle>
+                <div className="text-4xl font-bold text-gray-900 mb-2">£0.00</div>
+                <CardDescription>14 days • Then £9.99/month</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">5 AI images/month</span>
-                  </li>
-                  <li className="flex items-center">
-                    <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Basic templates</span>
+                    <span className="text-sm">5 AI posts</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
@@ -119,11 +149,15 @@ export default function HomePage() {
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Basic analytics</span>
+                    <span className="text-sm">Basic templates</span>
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    <span className="text-sm">Email notifications</span>
                   </li>
                 </ul>
-                <Button className="w-full mt-6" variant="outline" onClick={() => router.push("/create")}>
-                  Start Free
+                <Button className="w-full mt-6" variant="outline">
+                  Start Free Trial
                 </Button>
               </CardContent>
             </Card>
@@ -132,38 +166,33 @@ export default function HomePage() {
             <Card className="border-2 border-blue-200 hover:border-blue-400 transition-colors">
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-2xl">Starter</CardTitle>
-                <div className="text-4xl font-bold text-blue-600 mb-2">£9</div>
-                <CardDescription>For growing creators</CardDescription>
+                <div className="text-4xl font-bold text-blue-600 mb-2">£9.99</div>
+                <CardDescription>per month</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">50 AI images/month</span>
+                    <span className="text-sm">50 AI posts/month</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">10 AI videos/month</span>
+                    <span className="text-sm">2 social platforms</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">3 social platforms</span>
+                    <span className="text-sm">Premium templates</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Advanced templates</span>
+                    <span className="text-sm">Basic analytics</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Scheduling tools</span>
+                    <span className="text-sm">Email support</span>
                   </li>
                 </ul>
-                <Button
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => router.push("/create")}
-                >
-                  Choose Starter
-                </Button>
+                <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">Choose Starter</Button>
               </CardContent>
             </Card>
 
@@ -177,26 +206,26 @@ export default function HomePage() {
               </div>
               <CardHeader className="text-center pb-2 pt-8">
                 <CardTitle className="text-2xl">Pro</CardTitle>
-                <div className="text-4xl font-bold text-purple-600 mb-2">£29</div>
-                <CardDescription>For serious creators</CardDescription>
+                <div className="text-4xl font-bold text-purple-600 mb-2">£29.99</div>
+                <CardDescription>per month</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">200 AI images/month</span>
+                    <span className="text-sm">200 AI posts/month</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">50 AI videos/month</span>
+                    <span className="text-sm">3 social platforms</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Unlimited platforms</span>
+                    <span className="text-sm">All templates</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">AI voice generation</span>
+                    <span className="text-sm">AI Voice cloning</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
@@ -207,10 +236,7 @@ export default function HomePage() {
                     <span className="text-sm">Priority support</span>
                   </li>
                 </ul>
-                <Button
-                  className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-                  onClick={() => router.push("/create")}
-                >
+                <Button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                   Choose Pro
                 </Button>
               </CardContent>
@@ -220,42 +246,38 @@ export default function HomePage() {
             <Card className="border-2 border-gray-300 hover:border-gray-500 transition-colors">
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-2xl">Enterprise</CardTitle>
-                <div className="text-4xl font-bold text-gray-900 mb-2">£99</div>
-                <CardDescription>For teams & agencies</CardDescription>
+                <div className="text-4xl font-bold text-gray-900 mb-2">£299.00</div>
+                <CardDescription>per month</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Unlimited AI content</span>
+                    <span className="text-sm">Unlimited posts*</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Team collaboration</span>
+                    <span className="text-sm">All platforms</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">White-label options</span>
+                    <span className="text-sm">Custom templates</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">Custom integrations</span>
+                    <span className="text-sm">White-label</span>
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    <span className="text-sm">API access</span>
                   </li>
                   <li className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
                     <span className="text-sm">Dedicated support</span>
                   </li>
-                  <li className="flex items-center">
-                    <Check className="w-5 h-5 text-green-500 mr-3" />
-                    <span className="text-sm">SLA guarantee</span>
-                  </li>
                 </ul>
-                <Button
-                  className="w-full mt-6 bg-gray-900 hover:bg-gray-800 text-white"
-                  onClick={() => router.push("/create")}
-                >
-                  Contact Sales
-                </Button>
+                <Button className="w-full mt-6 bg-gray-900 hover:bg-gray-800 text-white">Contact Sales</Button>
+                <p className="text-xs text-gray-500 text-center">*Fair usage policy applies</p>
               </CardContent>
             </Card>
           </div>
@@ -263,98 +285,45 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center max-w-4xl">
-          <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Ready to Go Viral?
           </h2>
-          <p className="text-xl text-gray-700 mb-8">
+          <p className="text-xl text-gray-600 mb-8">
             Join thousands of creators who are already using NexaraX to transform their social media presence.
           </p>
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl"
-            onClick={() => router.push("/create")}
-          >
-            <Rocket className="w-6 h-6 mr-3" />
-            Get Started Free Today
-            <ArrowRight className="w-6 h-6 ml-3" />
-          </Button>
+          <Link href="/get-started">
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-12 py-6 text-xl">
+              <Zap className="w-6 h-6 mr-3" />
+              Start Your Free Trial Today
+            </Button>
+          </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">NexaraX</span>
-              </div>
-              <p className="text-gray-400">AI-powered social media marketing that actually works.</p>
+      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Zap className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400" onClick={() => router.push("/features")}>
-                    Features
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400" onClick={() => router.push("/pricing")}>
-                    Pricing
-                  </Button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400">
-                    About
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400" onClick={() => router.push("/contact")}>
-                    Contact
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400" onClick={() => router.push("/privacy")}>
-                    Privacy
-                  </Button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400">
-                    Help Center
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400">
-                    Documentation
-                  </Button>
-                </li>
-                <li>
-                  <Button variant="link" className="p-0 h-auto text-gray-400" onClick={() => router.push("/status")}>
-                    Status
-                  </Button>
-                </li>
-              </ul>
-            </div>
+            <span className="text-xl font-bold">NexaraX</span>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 NexaraX. All rights reserved.</p>
+          <p className="text-gray-400 mb-4">Transform your social media presence with AI-powered content creation.</p>
+          <div className="flex justify-center space-x-6">
+            <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+              Contact
+            </Link>
           </div>
+          <p className="text-gray-500 text-sm mt-8">© 2024 NexaraX. All rights reserved.</p>
         </div>
       </footer>
     </div>
