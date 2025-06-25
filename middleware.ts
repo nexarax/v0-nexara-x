@@ -5,27 +5,6 @@ import { getToken } from "next-auth/jwt"
 // Rate limiting store (in production, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
-function getClientIP(request: NextRequest): string {
-  // Try multiple headers to get the real IP
-  const forwarded = request.headers.get("x-forwarded-for")
-  const realIP = request.headers.get("x-real-ip")
-  const cfConnectingIP = request.headers.get("cf-connecting-ip")
-  
-  if (forwarded) {
-    return forwarded.split(',')[0].trim()
-  }
-  
-  if (realIP) {
-    return realIP
-  }
-  
-  if (cfConnectingIP) {
-    return cfConnectingIP
-  }
-  
-  return "unknown"
-}
-
 function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) {
   const now = Date.now()
   const key = `${ip}`
@@ -47,7 +26,7 @@ function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) 
 
 export async function middleware(req: NextRequest) {
   // Rate limiting
-  const ip = getClientIP(req)
+  const ip = req.ip || req.headers.get("x-forwarded-for") || "unknown"
   const { allowed, remaining } = rateLimit(ip)
 
   if (!allowed) {
@@ -68,6 +47,7 @@ export async function middleware(req: NextRequest) {
     "/contact",
     "/get-started",
     "/create",
+    "/pricing",
     "/auth/signin",
     "/auth/signup",
     "/auth/error",
@@ -79,9 +59,15 @@ export async function middleware(req: NextRequest) {
     "/api/auth",
   ]
 
-  const isPublicRoute = publicRoutes.some(
-    (route) => req.nextUrl.pathname === route || req.nextUrl.pathname.startsWith(route + "/"),
-  )
+  const pathname = req.nextUrl.pathname
+
+  // Check if the current path is a public route
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === "/") {
+      return pathname === "/"
+    }
+    return pathname === route || pathname.startsWith(route + "/")
+  })
 
   // Simple security headers without authentication for now
   const response = NextResponse.next()
@@ -92,7 +78,7 @@ export async function middleware(req: NextRequest) {
   response.headers.set("X-XSS-Protection", "1; mode=block")
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
 
-  // Check authentication for protected routes
+  // Check authentication for protected routes ONLY
   if (!isPublicRoute) {
     const token = await getToken({
       req,
