@@ -217,13 +217,18 @@ export default function PricingPage() {
             </Card>
           ))}
         </div>
-
-        {/* FAQ or Additional Info */}
-        <div className="text-center mt-16">
-          <p className="text-gray-600">
-            All plans include 14-day free trial • No credit card required • Cancel anytime
-          </p>
-        </div>
+{/* FAQ or Additional Info */}
+<div className="text-center mt-16">
+  <div className="space-y-2">
+    <p className="text-gray-600">
+      <span className="font-medium">Free Trial:</span> 14 days, no credit card required
+    </p>
+    <p className="text-gray-600">
+      <span className="font-medium">Paid Plans:</span> Start immediately • Cancel anytime
+    </p>
+  </div>
+</div>
+        
       </div>
     </div>
   )
