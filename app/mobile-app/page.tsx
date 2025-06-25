@@ -5,34 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Bell,
-  Activity,
-  AlertTriangle,
-  CheckCircle,
-  Users,
-  Settings,
-  Phone,
-  MessageSquare,
-  Zap,
-  Eye,
-  ArrowUp,
-  MapPin,
-  Moon,
-  Sun,
-  Wifi,
-  WifiOff,
-  Battery,
-  Instagram,
-  Twitter,
-  Youtube,
-  Home,
-  BarChart3,
-  User,
-  Search,
-  Filter,
-  Share2,
-} from "lucide-react"
+import { Bell, Activity, AlertTriangle, CheckCircle, Users, Settings, Phone, MessageSquare, Zap, Eye, ArrowUp, MapPin, Moon, Sun, Wifi, WifiOff, Battery, Instagram, Twitter, Youtube, Home, BarChart3, User, Search, Filter, Share2 } from 'lucide-react'
 
 interface MobileAlert {
   id: string
@@ -457,7 +430,7 @@ export default function MobileAppPage() {
                         <div className="flex items-center gap-2">
                           {platformIcons[alert.platform as keyof typeof platformIcons]}
                           <span className="font-medium text-sm">{alert.platform}</span>
-                          <Badge className={getSeverityColor(alert.severity)} size="sm">
+                          <Badge className={getSeverityColor(alert.severity)}>
                             {alert.severity.toUpperCase()}
                           </Badge>
                         </div>
