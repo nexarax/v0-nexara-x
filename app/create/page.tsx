@@ -17,25 +17,29 @@ export default function CreatePage() {
   // Email validation state
   const [isValidated, setIsValidated] = useState(false)
   const [userEmail, setUserEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Email validation check
+  // Email validation check - Fixed for SSR
   useEffect(() => {
-    // Check if user has validated email
-    const emailValidated = sessionStorage.getItem("nexarax_email_validated")
-    const email = sessionStorage.getItem("nexarax_user_email")
-    
-    if (!emailValidated || !email) {
-      // Redirect to get-started if no validated email
-      router.push("/get-started")
-      return
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      const emailValidated = sessionStorage.getItem("nexarax_email_validated")
+      const email = sessionStorage.getItem("nexarax_user_email")
+      
+      if (!emailValidated || !email) {
+        // Redirect to get-started if no validated email
+        router.push("/get-started")
+        return
+      }
+      
+      setUserEmail(email)
+      setIsValidated(true)
     }
-    
-    setUserEmail(email)
-    setIsValidated(true)
+    setIsLoading(false)
   }, [router])
 
-  // Show loading while validating
-  if (!isValidated) {
+  // Show loading while checking validation
+  if (isLoading || !isValidated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="text-center">
@@ -75,9 +79,11 @@ export default function CreatePage() {
             </span>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="text-sm text-gray-600">
-              Welcome, {userEmail}
-            </div>
+            {userEmail && (
+              <div className="text-sm text-gray-600">
+                Welcome, {userEmail}
+              </div>
+            )}
             <Button variant="ghost" onClick={() => router.push("/dashboard")}>
               Dashboard
             </Button>
