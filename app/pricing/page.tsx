@@ -9,7 +9,8 @@ import { PRICING_TIERS } from "@/lib/pricing-config"
 export default function PricingPage() {
   const tiers = Object.entries(PRICING_TIERS).map(([key, tier]) => ({
     ...tier,
-    id: key
+    id: key,
+    popular: key === "pro" // Set Pro as popular
   }))
 
   const getButtonStyle = (tierId: string) => {
