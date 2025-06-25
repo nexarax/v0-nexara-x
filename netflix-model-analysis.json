@@ -1,0 +1,32 @@
+{
+  "netflixStyleModel": {
+    "concept": "Content-as-a-Service Platform",
+    "description": "License AI-generated content and templates to other creators/platforms",
+    "revenueStreams": [
+      "Content licensing fees (£10-50 per piece)",
+      "Template marketplace (£5-25 per template)",
+      "White-label platform licensing (£500-5000/month)",
+      "API access for developers (£0.10 per generation)",
+      "Viral content syndication (revenue share)"
+    ],
+    "advantages": [
+      "Infinite scalability - content created once, sold many times",
+      "Higher margins - no ongoing costs per sale",
+      "Network effects - more content = more value",
+      "B2B revenue typically higher than B2C",
+      "Creates moat through content library"
+    ],
+    "implementation": {
+      "phase1": "Build content library through user generations",
+      "phase2": "Create marketplace for selling templates",
+      "phase3": "Offer white-label licensing to agencies",
+      "phase4": "API marketplace for developers",
+      "phase5": "Full Netflix-style content syndication"
+    },
+    "projectedRevenue": {
+      "year1": "£50K additional revenue",
+      "year2": "£200K additional revenue",
+      "year3": "£500K+ additional revenue"
+    }
+  }
+}

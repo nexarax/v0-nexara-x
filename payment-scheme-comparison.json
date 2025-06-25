@@ -1,0 +1,132 @@
+{
+  "paymentSchemes": {
+    "monthlyOnly": {
+      "pros": [
+        "Simple to understand",
+        "Low barrier to entry",
+        "Predictable recurring revenue",
+        "Easy to budget for customers"
+      ],
+      "cons": [
+        "Higher churn rate",
+        "Lower customer lifetime value",
+        "Cash flow dependent on monthly cycles",
+        "No upfront cash boost"
+      ],
+      "bestFor": "Simple launch, testing market fit",
+      "wealthPotential": "Medium",
+      "growthPotential": "Medium"
+    },
+    "annualDiscount": {
+      "pros": [
+        "Immediate cash flow boost",
+        "Lower churn rate",
+        "Higher customer lifetime value",
+        "Better cash flow for reinvestment"
+      ],
+      "cons": [
+        "Higher upfront commitment barrier",
+        "Refund risk if customers cancel",
+        "More complex pricing structure"
+      ],
+      "bestFor": "Established product with proven value",
+      "wealthPotential": "High",
+      "growthPotential": "High"
+    },
+    "freemiumModel": {
+      "pros": [
+        "Viral growth potential",
+        "Lower acquisition costs",
+        "Higher conversion quality",
+        "Market education opportunity"
+      ],
+      "cons": [
+        "High support costs for free users",
+        "Complex feature gating",
+        "Lower immediate revenue",
+        "Conversion optimization required"
+      ],
+      "bestFor": "Network effect products, viral growth",
+      "wealthPotential": "Very High",
+      "growthPotential": "Very High"
+    },
+    "lifetimeDeals": {
+      "pros": [
+        "Massive immediate cash injection",
+        "No churn risk",
+        "Customer acquisition funding",
+        "Marketing buzz and urgency"
+      ],
+      "cons": [
+        "Long-term revenue loss",
+        "Ongoing costs without revenue",
+        "Devalues product perception",
+        "Difficult to sustain"
+      ],
+      "bestFor": "Launch funding, limited-time promotions",
+      "wealthPotential": "Medium",
+      "growthPotential": "Medium"
+    },
+    "tieredPricing": {
+      "pros": [
+        "Captures different market segments",
+        "Higher average revenue per user",
+        "Natural upgrade path",
+        "Broader market appeal"
+      ],
+      "cons": [
+        "Complex pricing structure",
+        "Feature development overhead",
+        "Customer confusion potential",
+        "Support complexity"
+      ],
+      "bestFor": "Mature product with diverse use cases",
+      "wealthPotential": "Very High",
+      "growthPotential": "High"
+    }
+  },
+  "hybridRecommendation": {
+    "structure": {
+      "free": {
+        "price": 0,
+        "features": "5 AI posts per month",
+        "purpose": "Viral growth and market education"
+      },
+      "pro": {
+        "price": 29,
+        "features": "500 posts, all platforms, analytics",
+        "purpose": "Main revenue driver"
+      },
+      "business": {
+        "price": 49,
+        "features": "1000 posts, team features, priority support",
+        "purpose": "High-value customers"
+      },
+      "annual": {
+        "discount": "2 months free",
+        "purpose": "Cash flow boost and retention"
+      },
+      "lifetime": {
+        "price": 497,
+        "purpose": "Launch funding and buzz"
+      }
+    },
+    "expectedResults": {
+      "year1": {
+        "users": 5000,
+        "monthlyIncome": 2500,
+        "totalWealth": 30000
+      },
+      "year3": {
+        "users": 25000,
+        "monthlyIncome": 15000,
+        "totalWealth": 400000
+      },
+      "year5": {
+        "users": 75000,
+        "monthlyIncome": 45000,
+        "totalWealth": 1200000
+      }
+    }
+  }
+}

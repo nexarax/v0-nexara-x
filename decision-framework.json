@@ -1,0 +1,59 @@
+{
+  "decisionFramework": {
+    "question": "Should we launch triple market strategy tomorrow?",
+
+    "options": [
+      {
+        "name": "Triple Market Launch",
+        "successRate": "62%",
+        "revenueUpside": "4.7x (£135K/month)",
+        "timeToRevenue": "Immediate",
+        "complexity": "Very High",
+        "riskLevel": "High",
+        "recommendation": "Only if you're very risk-tolerant"
+      },
+      {
+        "name": "Sequential Launch",
+        "successRate": "86%",
+        "revenueUpside": "Gradual growth to 4.7x",
+        "timeToRevenue": "3-6 months",
+        "complexity": "Medium",
+        "riskLevel": "Low",
+        "recommendation": "Best for methodical approach"
+      },
+      {
+        "name": "Hybrid Approach",
+        "successRate": "88%",
+        "revenueUpside": "2-3x immediate, 4.7x potential",
+        "timeToRevenue": "Immediate with growth",
+        "complexity": "Low",
+        "riskLevel": "Low",
+        "recommendation": "RECOMMENDED - Best balance"
+      }
+    ],
+
+    "keyFactors": {
+      "brandClarity": "Critical for long-term success",
+      "executionCapacity": "Limited resources, high complexity risk",
+      "marketTiming": "All markets are hot right now",
+      "competitiveAdvantage": "First-mover opportunity",
+      "customerSuccess": "Quality over quantity approach"
+    },
+
+    "redFlags": [
+      "Brand confusion from day 1",
+      "Support overwhelm with 3 customer types",
+      "Feature conflicts between markets",
+      "Marketing message dilution",
+      "Resource spreading too thin"
+    ],
+
+    "greenFlags": [
+      "Platform technically ready",
+      "Market demand validated",
+      "Zero development costs",
+      "Revenue diversification",
+      "Competitive moats possible"
+    ]
+  }
+}
