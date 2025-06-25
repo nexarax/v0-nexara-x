@@ -5,6 +5,27 @@ import { getToken } from "next-auth/jwt"
 // Rate limiting store (in production, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
+function getClientIP(request: NextRequest): string {
+  // Try multiple headers to get the real IP
+  const forwarded = request.headers.get("x-forwarded-for")
+  const realIP = request.headers.get("x-real-ip")
+  const cfConnectingIP = request.headers.get("cf-connecting-ip")
+  
+  if (forwarded) {
+    return forwarded.split(',')[0].trim()
+  }
+  
+  if (realIP) {
+    return realIP
+  }
+  
+  if (cfConnectingIP) {
+    return cfConnectingIP
+  }
+  
+  return "unknown"
+}
+
 function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) {
   const now = Date.now()
   const key = `${ip}`
@@ -26,7 +47,7 @@ function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) 
 
 export async function middleware(req: NextRequest) {
   // Rate limiting
-  const ip = req.ip || req.headers.get("x-forwarded-for") || "unknown"
+  const ip = getClientIP(req)
   const { allowed, remaining } = rateLimit(ip)
 
   if (!allowed) {
