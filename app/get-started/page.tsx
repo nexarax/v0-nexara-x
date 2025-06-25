@@ -6,13 +6,62 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Sparkles, Check, ArrowRight, Zap, Crown, Users } from 'lucide-react'
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Sparkles, Check, ArrowRight, Zap, Crown, Users, Mail, AlertCircle } from 'lucide-react'
 import { useRouter } from "next/navigation"
 
 export default function GetStartedPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [selectedPlan, setSelectedPlan] = useState("pro")
+  const [isValidating, setIsValidating] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  // Email validation function
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  // Handle form submission
+  const handleStartCreating = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setIsValidating(true)
+
+    // Validate email
+    if (!email) {
+      setError("Please enter your email address")
+      setIsValidating(false)
+      return
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      setIsValidating(false)
+      return
+    }
+
+    try {
+      // Store email in session storage for the create page
+      sessionStorage.setItem("nexarax_user_email", email)
+      sessionStorage.setItem("nexarax_selected_plan", selectedPlan)
+      sessionStorage.setItem("nexarax_email_validated", "true")
+      
+      setSuccess(true)
+      
+      // Redirect after short delay
+      setTimeout(() => {
+        router.push("/create")
+      }, 1000)
+      
+    } catch (error) {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setIsValidating(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -46,39 +95,76 @@ export default function GetStartedPage() {
             </h1>
 
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
-              Join 50,000+ creators using AI to generate viral content. Choose your plan and start creating in under 60
-              seconds.
+              Join 50,000+ creators using AI to generate viral content. Enter your email to start creating in under 60 seconds.
             </p>
           </div>
 
-          {/* Quick Start Form */}
+          {/* Quick Start Form - Enhanced with Validation */}
           <Card className="mb-12 border-2 border-blue-200 bg-white/80 backdrop-blur-sm">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Quick Start - Free Trial</CardTitle>
-              <CardDescription>No credit card required • Start creating immediately</CardDescription>
+              <CardTitle className="text-2xl flex items-center justify-center gap-2">
+                <Mail className="w-6 h-6" />
+                Quick Start - Free Trial
+              </CardTitle>
+              <CardDescription>Enter your email to start creating • No credit card required</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="text-lg py-3"
-                />
-              </div>
+              <form onSubmit={handleStartCreating} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="text-lg py-3"
+                    required
+                    disabled={isValidating || success}
+                  />
+                </div>
 
-              <Button
-                size="lg"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 text-lg"
-                onClick={() => router.push("/create")}
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Start Creating Now - FREE
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                {success && (
+                  <Alert className="border-green-200 bg-green-50">
+                    <Check className="h-4 w-4 text-green-600" />
+                    <AlertDescription className="text-green-800">
+                      Email validated! Redirecting to create page...
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 text-lg"
+                  disabled={isValidating || success}
+                >
+                  {isValidating ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Validating Email...
+                    </>
+                  ) : success ? (
+                    <>
+                      <Check className="w-5 h-5 mr-2" />
+                      Email Validated!
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Start Creating Now - FREE
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </form>
 
               <p className="text-center text-sm text-gray-600">
                 By signing up, you agree to our Terms of Service and Privacy Policy
@@ -277,20 +363,6 @@ export default function GetStartedPage() {
                 <p className="text-gray-600">Track performance and optimize content for maximum engagement</p>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Final CTA */}
-          <div className="text-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl"
-              onClick={() => router.push("/create")}
-            >
-              <Sparkles className="w-6 h-6 mr-3" />
-              Start Your Free Trial Now
-              <ArrowRight className="w-6 h-6 ml-3" />
-            </Button>
-            <p className="mt-4 text-gray-600">Join 50,000+ creators already using NexaraX</p>
           </div>
         </div>
       </section>
