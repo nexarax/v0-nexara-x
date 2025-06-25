@@ -1,0 +1,57 @@
+export const PRICING_TIERS = {
+  free: {
+    name: "Free",
+    price: 0,
+    currency: "£",
+    features: {
+      aiPosts: 5,
+      aiVideos: 0,
+      platforms: 1,
+      templates: "Basic templates",
+      analytics: "Basic analytics",
+      support: "Community support",
+    },
+  },
+  starter: {
+    name: "Starter",
+    price: 9,
+    currency: "£",
+    features: {
+      aiPosts: 50,
+      aiVideos: 10,
+      platforms: 3,
+      templates: "Advanced templates",
+      scheduling: true,
+      analytics: "Basic analytics",
+      support: "Email support",
+    },
+  },
+  pro: {
+    name: "Pro",
+    price: 29,
+    currency: "£",
+    features: {
+      aiPosts: 200,
+      aiVideos: 50,
+      platforms: "unlimited",
+      voiceGeneration: true,
+      analytics: "Advanced analytics",
+      support: "Priority support",
+    },
+  },
+  enterprise: {
+    name: "Enterprise",
+    price: 99,
+    currency: "£",
+    features: {
+      aiPosts: "unlimited",
+      aiVideos: "unlimited",
+      platforms: "unlimited",
+      teamCollaboration: true,
+      whiteLabel: true,
+      customIntegrations: true,
+      support: "Dedicated support",
+      sla: true,
+    },
+  },
+} as const
