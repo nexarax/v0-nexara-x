@@ -86,22 +86,22 @@ export default function GetStartedPage() {
             </CardContent>
           </Card>
 
-          {/* Plan Selection */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {/* Free Plan */}
+          {/* Plan Selection - Updated 4-Tier Structure */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {/* Free Trial */}
             <Card
               className={`border-2 transition-all cursor-pointer ${selectedPlan === "free" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}
               onClick={() => setSelectedPlan("free")}
             >
               <CardHeader className="text-center">
-                <CardTitle className="text-xl">Free</CardTitle>
-                <div className="text-3xl font-bold text-gray-600 my-2">£0</div>
-                <CardDescription>Perfect for testing</CardDescription>
+                <CardTitle className="text-xl">Free Trial</CardTitle>
+                <div className="text-3xl font-bold text-gray-600 my-2">£0.00</div>
+                <CardDescription>14 days • Then £9.99/month</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center">
-                    <Check className="w-4 h-4 text-green-500 mr-2" />5 AI posts/month
+                    <Check className="w-4 h-4 text-green-500 mr-2" />5 AI posts
                   </li>
                   <li className="flex items-center">
                     <Check className="w-4 h-4 text-green-500 mr-2" />1 social platform
@@ -109,6 +109,45 @@ export default function GetStartedPage() {
                   <li className="flex items-center">
                     <Check className="w-4 h-4 text-green-500 mr-2" />
                     Basic templates
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Email notifications
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Starter Plan */}
+            <Card
+              className={`border-2 transition-all cursor-pointer ${selectedPlan === "starter" ? "border-blue-500 bg-blue-50" : "border-blue-200 hover:border-blue-300"}`}
+              onClick={() => setSelectedPlan("starter")}
+            >
+              <CardHeader className="text-center">
+                <CardTitle className="text-xl">Starter</CardTitle>
+                <div className="text-3xl font-bold text-blue-600 my-2">£9.99</div>
+                <CardDescription>per month</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    50 AI posts/month
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />2 social platforms
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Premium templates
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Basic analytics
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Email support
                   </li>
                 </ul>
               </CardContent>
@@ -127,8 +166,8 @@ export default function GetStartedPage() {
               </div>
               <CardHeader className="text-center pt-8">
                 <CardTitle className="text-xl">Pro</CardTitle>
-                <div className="text-3xl font-bold text-purple-600 my-2">£29</div>
-                <CardDescription>For serious creators</CardDescription>
+                <div className="text-3xl font-bold text-purple-600 my-2">£29.99</div>
+                <CardDescription>per month</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
@@ -147,6 +186,14 @@ export default function GetStartedPage() {
                     <Check className="w-4 h-4 text-green-500 mr-2" />
                     AI voice cloning
                   </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Advanced analytics
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Priority support
+                  </li>
                 </ul>
               </CardContent>
             </Card>
@@ -158,14 +205,14 @@ export default function GetStartedPage() {
             >
               <CardHeader className="text-center">
                 <CardTitle className="text-xl">Enterprise</CardTitle>
-                <div className="text-3xl font-bold text-orange-600 my-2">£299</div>
-                <CardDescription>For agencies & teams</CardDescription>
+                <div className="text-3xl font-bold text-orange-600 my-2">£299.00</div>
+                <CardDescription>per month</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center">
                     <Check className="w-4 h-4 text-green-500 mr-2" />
-                    Unlimited posts
+                    Unlimited posts*
                   </li>
                   <li className="flex items-center">
                     <Check className="w-4 h-4 text-green-500 mr-2" />
@@ -177,9 +224,18 @@ export default function GetStartedPage() {
                   </li>
                   <li className="flex items-center">
                     <Check className="w-4 h-4 text-green-500 mr-2" />
+                    White-label
+                  </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
                     API access
                   </li>
+                  <li className="flex items-center">
+                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    Dedicated support
+                  </li>
                 </ul>
+                <p className="text-xs text-gray-500 mt-2">*Fair usage policy</p>
               </CardContent>
             </Card>
           </div>
