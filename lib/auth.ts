@@ -18,7 +18,10 @@ export async function requireRole(requiredRole: string) {
     redirect("/auth/signin")
   }
 
-  if (session.user?.role !== requiredRole && session.user?.role !== "admin") {
+  // Check if user has role property, otherwise default to 'user'
+  const userRole = (session.user as any)?.role || 'user'
+  
+  if (userRole !== requiredRole && userRole !== "admin") {
     redirect("/unauthorized")
   }
 
