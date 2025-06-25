@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,16 +8,51 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Sparkles, ImageIcon, Video, Mic, Download, Share, Wand2 } from "lucide-react"
+import { Sparkles, ImageIcon, Video, Mic, Download, Share, Wand2 } from 'lucide-react'
 import { useRouter } from "next/navigation"
 
 export default function CreatePage() {
   const router = useRouter()
+  
+  // Email validation state
+  const [isValidated, setIsValidated] = useState(false)
+  const [userEmail, setUserEmail] = useState("")
+
+  // Email validation check
+  useEffect(() => {
+    // Check if user has validated email
+    const emailValidated = sessionStorage.getItem("nexarax_email_validated")
+    const email = sessionStorage.getItem("nexarax_user_email")
+    
+    if (!emailValidated || !email) {
+      // Redirect to get-started if no validated email
+      router.push("/get-started")
+      return
+    }
+    
+    setUserEmail(email)
+    setIsValidated(true)
+  }, [router])
+
+  // Show loading while validating
+  if (!isValidated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Verifying access...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Existing state variables
   const [prompt, setPrompt] = useState("")
   const [contentType, setContentType] = useState("image")
   const [style, setStyle] = useState("viral")
   const [isGenerating, setIsGenerating] = useState(false)
 
+  // Existing functions
   const handleGenerate = async () => {
     setIsGenerating(true)
     // Simulate AI generation
@@ -40,6 +75,9 @@ export default function CreatePage() {
             </span>
           </div>
           <div className="flex items-center space-x-4">
+            <div className="text-sm text-gray-600">
+              Welcome, {userEmail}
+            </div>
             <Button variant="ghost" onClick={() => router.push("/dashboard")}>
               Dashboard
             </Button>
