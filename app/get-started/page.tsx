@@ -24,7 +24,7 @@ export default function GetStartedPage() {
     return emailRegex.test(email)
   }
 
-  // Handle form submission
+  // Handle form submission with email verification
   const handleStartCreating = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -44,17 +44,24 @@ export default function GetStartedPage() {
     }
 
     try {
-      // Store email in session storage for the create page
-      sessionStorage.setItem("nexarax_user_email", email)
-      sessionStorage.setItem("nexarax_selected_plan", selectedPlan)
-      sessionStorage.setItem("nexarax_email_validated", "true")
-      
-      setSuccess(true)
-      
-      // Redirect after short delay
-      setTimeout(() => {
-        router.push("/create")
-      }, 1000)
+      // Send verification email
+      const response = await fetch('/api/send-verification-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          selectedPlan,
+        }),
+      })
+
+      if (response.ok) {
+        setSuccess(true)
+        // Don't redirect - show success message instead
+      } else {
+        setError("Failed to send verification email. Please try again.")
+      }
       
     } catch (error) {
       setError("Something went wrong. Please try again.")
@@ -99,14 +106,14 @@ export default function GetStartedPage() {
             </p>
           </div>
 
-          {/* Quick Start Form - Enhanced with Validation */}
+          {/* Quick Start Form - Enhanced with Email Verification */}
           <Card className="mb-12 border-2 border-blue-200 bg-white/80 backdrop-blur-sm">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl flex items-center justify-center gap-2">
                 <Mail className="w-6 h-6" />
                 Quick Start - Free Trial
               </CardTitle>
-              <CardDescription>Enter your email to start creating • No credit card required</CardDescription>
+              <CardDescription>Enter your email to receive verification link • No credit card required</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <form onSubmit={handleStartCreating} className="space-y-6">
@@ -133,9 +140,10 @@ export default function GetStartedPage() {
 
                 {success && (
                   <Alert className="border-green-200 bg-green-50">
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Mail className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
-                      Email validated! Redirecting to create page...
+                      <strong>Verification email sent!</strong><br />
+                      Please check your email and click the verification link to access the content creation studio.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -149,17 +157,17 @@ export default function GetStartedPage() {
                   {isValidating ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Validating Email...
+                      Sending Verification Email...
                     </>
                   ) : success ? (
                     <>
                       <Check className="w-5 h-5 mr-2" />
-                      Email Validated!
+                      Check Your Email!
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5 mr-2" />
-                      Start Creating Now - FREE
+                      Send Verification Email
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </>
                   )}
