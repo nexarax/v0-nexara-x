@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, CheckCircle, Shield, User, Mail, Phone, Building, Crown, Zap, ArrowRight } from "lucide-react"
+import { Sparkles, CheckCircle, Shield, User, Mail, Phone, Building, Crown, Zap, ArrowRight } from 'lucide-react'
 
 export default function SignupPage() {
   const searchParams = useSearchParams()
@@ -27,50 +27,66 @@ export default function SignupPage() {
   }, [searchParams])
 
   const plans = {
-    starter: {
-      name: "Creative Starter",
-      price: "£12",
+    free: {
+      name: "Free",
+      price: "£0",
       period: "/month",
-      description: "Perfect for individual creators",
+      description: "Perfect for getting started",
       features: [
-        "150 AI generations/month",
-        "HD exports (1080p)",
-        "Commercial license",
-        "Email support",
+        "5 AI images/month",
         "Basic templates",
+        "1 social platform",
+        "Basic analytics",
       ],
       color: "border-gray-200",
+      recommended: false,
     },
-    pro: {
-      name: "Creative Pro",
-      price: "£32",
+    starter: {
+      name: "Starter",
+      price: "£9",
       period: "/month",
-      description: "For serious content creators",
+      description: "For growing creators",
       features: [
-        "Unlimited generations",
-        "4K exports (ultra-HD)",
-        "Voice cloning & video",
-        "Priority support (2hr response)",
-        "Premium templates",
-        "Viral analytics",
+        "50 AI images/month",
+        "10 AI videos/month",
+        "3 social platforms",
+        "Advanced templates",
+        "Scheduling tools",
       ],
       color: "border-blue-500",
+      recommended: false,
+    },
+    pro: {
+      name: "Pro",
+      price: "£29",
+      period: "/month",
+      description: "For serious creators",
+      features: [
+        "200 AI images/month",
+        "50 AI videos/month",
+        "Unlimited platforms",
+        "AI voice generation",
+        "Advanced analytics",
+        "Priority support",
+      ],
+      color: "border-purple-500",
       recommended: true,
     },
-    studio: {
-      name: "Creative Studio",
-      price: "£89",
+    enterprise: {
+      name: "Enterprise",
+      price: "£99",
       period: "/month",
-      description: "For teams and agencies",
+      description: "For teams & agencies",
       features: [
-        "Everything in Pro",
-        "Team collaboration (10 seats)",
-        "White-label exports",
-        "Custom AI training",
-        "API access",
+        "Unlimited AI content",
+        "Team collaboration",
+        "White-label options",
+        "Custom integrations",
         "Dedicated support",
+        "SLA guarantee",
       ],
-      color: "border-purple-200",
+      color: "border-gray-200",
+      recommended: false,
     },
   }
 
