@@ -1,17 +1,19 @@
 import Stripe from "stripe"
 import { createClient } from "@supabase/supabase-js"
 
+// Check if Stripe is configured
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
+// Only initialize Stripe if API key is available
 let stripe: Stripe | null = null
 let supabase: any = null
 
 if (stripeSecretKey) {
   stripe = new Stripe(stripeSecretKey, {
-    apiVersion: "2024-12-18.acacia",
+    apiVersion: "2025-05-28.basil",
   })
 }
 
@@ -19,6 +21,7 @@ if (supabaseUrl && supabaseServiceKey) {
   supabase = createClient(supabaseUrl, supabaseServiceKey)
 }
 
+// Simple security event logger (fallback if auth lib not available)
 async function logSecurityEvent(event: any) {
   try {
     if (supabase) {
@@ -31,6 +34,7 @@ async function logSecurityEvent(event: any) {
   }
 }
 
+// Simplified mapping - only 3 paid tiers
 const PRICE_ID_TO_TIER: Record<string, string> = {
   [process.env.STRIPE_STARTER_PRICE_ID || ""]: "starter",
   [process.env.STRIPE_PRO_PRICE_ID || ""]: "pro",
@@ -85,6 +89,7 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const priceId = subscription.items.data[0]?.price.id
   const tier = PRICE_ID_TO_TIER[priceId] || "free"
 
+  // Find user by Stripe customer ID
   const { data: existingSubscription } = await supabase
     .from("user_subscriptions")
     .select("user_id")
@@ -92,6 +97,7 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
     .single()
 
   if (existingSubscription) {
+    // Update existing subscription
     await supabase
       .from("user_subscriptions")
       .update({
@@ -123,9 +129,11 @@ async function handleSubscriptionCanceled(subscription: Stripe.Subscription) {
 }
 
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
+  // Log successful payment, could trigger email notifications, etc.
   console.log("Payment succeeded for customer:", invoice.customer)
 }
 
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
+  // Handle failed payment - could send email, update subscription status, etc.
   console.log("Payment failed for customer:", invoice.customer)
 }
