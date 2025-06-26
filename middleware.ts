@@ -25,8 +25,11 @@ function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) 
 }
 
 export async function middleware(req: NextRequest) {
+  // Get IP address correctly for Next.js middleware
+  const forwarded = req.headers.get("x-forwarded-for")
+  const ip = forwarded ? forwarded.split(",")[0] : req.headers.get("x-real-ip") || "127.0.0.1"
+  
   // Rate limiting
-  const ip = req.ip || req.headers.get("x-forwarded-for") || "unknown"
   const { allowed, remaining } = rateLimit(ip)
 
   if (!allowed) {
