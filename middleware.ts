@@ -25,8 +25,8 @@ function rateLimit(ip: string, limit = 1000, windowMs: number = 15 * 60 * 1000) 
 }
 
 export async function middleware(req: NextRequest) {
-  // Rate limiting - Fixed IP detection
-  const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
+  // Rate limiting
+  const ip = req.ip || req.headers.get("x-forwarded-for") || "unknown"
   const { allowed, remaining } = rateLimit(ip)
 
   if (!allowed) {
@@ -47,7 +47,6 @@ export async function middleware(req: NextRequest) {
     "/contact",
     "/get-started",
     "/create",
-    "/pricing",
     "/auth/signin",
     "/auth/signup",
     "/auth/error",
@@ -59,15 +58,9 @@ export async function middleware(req: NextRequest) {
     "/api/auth",
   ]
 
-  const pathname = req.nextUrl.pathname
-
-  // Check if the current path is a public route
-  const isPublicRoute = publicRoutes.some(route => {
-    if (route === "/") {
-      return pathname === "/"
-    }
-    return pathname === route || pathname.startsWith(route + "/")
-  })
+  const isPublicRoute = publicRoutes.some(
+    (route) => req.nextUrl.pathname === route || req.nextUrl.pathname.startsWith(route + "/"),
+  )
 
   // Simple security headers without authentication for now
   const response = NextResponse.next()
@@ -78,7 +71,7 @@ export async function middleware(req: NextRequest) {
   response.headers.set("X-XSS-Protection", "1; mode=block")
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
 
-  // Check authentication for protected routes ONLY
+  // Check authentication for protected routes
   if (!isPublicRoute) {
     const token = await getToken({
       req,
