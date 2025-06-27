@@ -1,10 +1,12 @@
 "use client"
 
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Zap, Mail, ArrowRight, ImageIcon, Video, Users, Clock, CheckCircle } from 'lucide-react'
+import { Zap, Mail, ArrowRight, ImageIcon, Video, Users, Clock, CheckCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
