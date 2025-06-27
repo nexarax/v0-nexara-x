@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Mail, MessageSquare, Phone, MapPin, ArrowLeft, Home, Send, CheckCircle } from "lucide-react"
+import { Zap, Mail, MessageSquare, ArrowLeft, Home, Send, CheckCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { submitContactForm } from "./actions"
 
@@ -207,20 +207,6 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium">Live Chat</p>
                     <p className="text-gray-600">Coming Soon</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Phone className="w-5 h-5 text-green-600 mt-1" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-gray-600">+44 20 1234 5678</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 text-red-600 mt-1" />
-                  <div>
-                    <p className="font-medium">Address</p>
-                    <p className="text-gray-600">London, United Kingdom</p>
                   </div>
                 </div>
               </CardContent>
