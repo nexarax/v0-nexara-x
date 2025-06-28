@@ -9,18 +9,28 @@ import { Input } from "@/components/ui/input"
 import { Zap, Mail, ArrowRight, ImageIcon, Video, Users, Clock, CheckCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { submitWaitlistEmail } from "./actions"
 
 export default function HoldingPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleNotifyMe = (e: React.FormEvent) => {
+  const handleNotifyMe = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
-      setIsSubscribed(true)
-      // Here you would typically send the email to your backend
-      console.log("Email subscription:", email)
+    if (email && !isSubmitting) {
+      setIsSubmitting(true)
+      try {
+        const result = await submitWaitlistEmail(email)
+        if (result.success) {
+          setIsSubscribed(true)
+          setEmail("")
+        }
+      } catch (error) {
+        console.error("Failed to submit email:", error)
+      }
+      setIsSubmitting(false)
     }
   }
 
@@ -80,13 +90,24 @@ export default function HoldingPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="flex-1"
+                  disabled={isSubmitting}
                 />
                 <Button
                   type="submit"
+                  disabled={isSubmitting || !email}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Notify Me
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="w-4 h-4 mr-2" />
+                      Notify Me
+                    </>
+                  )}
                 </Button>
               </form>
             ) : (
@@ -202,10 +223,18 @@ export default function HoldingPage() {
               Transform your social media presence with AI-powered content creation.
             </p>
             <div className="flex justify-center space-x-8 mb-8">
-              <Button variant="link" className="text-gray-400 hover:text-white p-0">
+              <Button
+                variant="link"
+                className="text-gray-400 hover:text-white p-0"
+                onClick={() => router.push("/privacy")}
+              >
                 Privacy
               </Button>
-              <Button variant="link" className="text-gray-400 hover:text-white p-0">
+              <Button
+                variant="link"
+                className="text-gray-400 hover:text-white p-0"
+                onClick={() => router.push("/terms")}
+              >
                 Terms
               </Button>
               <Button
