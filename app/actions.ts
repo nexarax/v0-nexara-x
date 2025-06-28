@@ -71,3 +71,4 @@ export async function submitWaitlistEmail(email: string) {
     return { success: false, message: "Failed to join waitlist. Please try again." }
   }
 }
+ 

@@ -76,3 +76,4 @@ export async function submitContactForm(formData: FormData) {
     return { success: true, message: "Thank you! Your message has been received." }
   }
 }
+ 
