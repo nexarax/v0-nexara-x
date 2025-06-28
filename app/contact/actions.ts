@@ -5,75 +5,56 @@ import { Resend } from "resend"
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function submitContactForm(formData: FormData) {
-  const name = formData.get("name") as string
-  const email = formData.get("email") as string
-  const subject = formData.get("subject") as string
-  const message = formData.get("message") as string
-
-  if (!name || !email || !subject || !message) {
-    return { success: false, message: "All fields are required" }
-  }
-
   try {
-    if (!process.env.RESEND_API_KEY) {
-      console.log("Contact form submission:", { name, email, subject, message })
-      return { success: true, message: "Thank you! Your message has been received." }
+    const name = formData.get("name") as string
+    const email = formData.get("email") as string
+    const subject = formData.get("subject") as string
+    const message = formData.get("message") as string
+
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      return {
+        success: false,
+        message: "Please fill in all required fields.",
+      }
     }
 
+    // Send email using Resend
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "contact@nexarax.com",
+      from: process.env.RESEND_FROM_EMAIL || "hello@nexarax.com",
       to: ["hello@nexarax.com"],
       subject: `Contact Form: ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
-            <h1 style="color: white; margin: 0;">New Contact Form Message</h1>
+          <h2 style="color: #2563eb;">New Contact Form Submission</h2>
+          <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
           </div>
-          
-          <div style="padding: 30px; background: #f8f9fa;">
-            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h2 style="color: #333; margin-top: 0;">Contact Details</h2>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #667eea;">Name:</strong>
-                <p style="margin: 5px 0; color: #555;">${name}</p>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #667eea;">Email:</strong>
-                <p style="margin: 5px 0; color: #555;">${email}</p>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #667eea;">Subject:</strong>
-                <p style="margin: 5px 0; color: #555;">${subject}</p>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #667eea;">Message:</strong>
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin-top: 5px;">
-                  <p style="margin: 0; color: #555; line-height: 1.6;">${message.replace(/\n/g, "<br>")}</p>
-                </div>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #667eea;">Received:</strong>
-                <p style="margin: 5px 0; color: #555;">${new Date().toLocaleString()}</p>
-              </div>
-            </div>
+          <div style="background: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <h3 style="color: #374151; margin-top: 0;">Message:</h3>
+            <p style="color: #6b7280; line-height: 1.6;">${message.replace(/\n/g, "<br>")}</p>
           </div>
-          
-          <div style="text-align: center; padding: 20px; color: #666; font-size: 12px;">
-            <p>This email was sent from the NexaraX contact form</p>
+          <div style="margin-top: 20px; padding: 15px; background: #eff6ff; border-radius: 8px;">
+            <p style="margin: 0; color: #1e40af; font-size: 14px;">
+              This message was sent from the NexaraX contact form.
+            </p>
           </div>
         </div>
       `,
     })
 
-    return { success: true, message: "Thank you! Your message has been sent successfully." }
+    return {
+      success: true,
+      message: "Thank you for your message! We'll get back to you within 24 hours.",
+    }
   } catch (error) {
-    console.error("Failed to send contact email:", error)
-    return { success: true, message: "Thank you! Your message has been received." }
+    console.error("Contact form error:", error)
+    return {
+      success: false,
+      message:
+        "Sorry, there was an error sending your message. Please try again or email us directly at hello@nexarax.com.",
+    }
   }
 }
- 

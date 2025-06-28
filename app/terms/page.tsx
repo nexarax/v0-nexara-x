@@ -1,186 +1,142 @@
-"use client"
-
+import { Brain, ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, FileText, AlertTriangle, Scale, Zap } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 export default function TermsPage() {
-  const router = useRouter()
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <Button variant="ghost" onClick={() => router.push("/")} className="mb-6 hover:bg-blue-50">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Home
-        </Button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="container mx-auto px-4 py-6">
+        <nav className="flex items-center justify-between">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              NexaraX
+            </span>
+          </Link>
+          <Link href="/">
+            <Button variant="ghost">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </nav>
+      </header>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 bg-blue-100 text-blue-800">📋 Terms of Service</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      {/* Terms of Service Content */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Terms of Service
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Please read these terms carefully before using NexaraX services.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">Last updated: January 2025</p>
+
+          <div className="prose prose-lg max-w-none">
+            <p className="text-gray-600 mb-8">
+              <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+            </p>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">1. Acceptance of Terms</h2>
+              <p className="text-gray-700 mb-4">
+                By accessing and using NexaraX, you accept and agree to be bound by the terms and provision of this
+                agreement. If you do not agree to abide by the above, please do not use this service.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">2. Use License</h2>
+              <p className="text-gray-700 mb-4">
+                Permission is granted to temporarily access NexaraX for personal, non-commercial transitory viewing
+                only. This is the grant of a license, not a transfer of title, and under this license you may not:
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Modify or copy the materials</li>
+                <li>Use the materials for any commercial purpose or for any public display</li>
+                <li>Attempt to reverse engineer any software contained on the platform</li>
+                <li>Remove any copyright or other proprietary notations from the materials</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">3. User Accounts</h2>
+              <p className="text-gray-700 mb-4">
+                When you create an account with us, you must provide information that is accurate, complete, and current
+                at all times. You are responsible for safeguarding the password and for all activities that occur under
+                your account.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">4. Prohibited Uses</h2>
+              <p className="text-gray-700 mb-4">You may not use our service:</p>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>For any unlawful purpose or to solicit others to perform unlawful acts</li>
+                <li>
+                  To violate any international, federal, provincial, or state regulations, rules, laws, or local
+                  ordinances
+                </li>
+                <li>
+                  To infringe upon or violate our intellectual property rights or the intellectual property rights of
+                  others
+                </li>
+                <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
+                <li>To submit false or misleading information</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">5. Service Availability</h2>
+              <p className="text-gray-700 mb-4">
+                We reserve the right to withdraw or amend our service, and any service or material we provide on
+                NexaraX, in our sole discretion without notice. We will not be liable if for any reason all or any part
+                of the service is unavailable at any time or for any period.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">6. Disclaimer</h2>
+              <p className="text-gray-700 mb-4">
+                The information on this platform is provided on an 'as is' basis. To the fullest extent permitted by
+                law, this Company excludes all representations, warranties, conditions and terms relating to our
+                platform and the use of this platform.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">7. Limitations</h2>
+              <p className="text-gray-700 mb-4">
+                In no event shall NexaraX or its suppliers be liable for any damages (including, without limitation,
+                damages for loss of data or profit, or due to business interruption) arising out of the use or inability
+                to use NexaraX, even if NexaraX or a NexaraX authorized representative has been notified orally or in
+                writing of the possibility of such damage.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">8. Revisions and Errata</h2>
+              <p className="text-gray-700 mb-4">
+                The materials appearing on NexaraX could include technical, typographical, or photographic errors.
+                NexaraX does not warrant that any of the materials on its platform are accurate, complete, or current.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">9. Contact Information</h2>
+              <p className="text-gray-700 mb-4">
+                If you have any questions about these Terms of Service, please contact us at:
+              </p>
+              <p className="text-gray-700">
+                Email:{" "}
+                <a href="mailto:legal@nexarax.com" className="text-blue-600 hover:text-blue-700">
+                  legal@nexarax.com
+                </a>
+              </p>
+            </section>
+          </div>
         </div>
-
-        <div className="space-y-8">
-          {/* Acceptance of Terms */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-600" />
-                Acceptance of Terms
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm">
-                By accessing or using NexaraX services, you agree to be bound by these Terms of Service and our Privacy
-                Policy. If you do not agree to these terms, please do not use our services.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Service Description */}
-          <Card className="border-2 border-purple-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-purple-600" />
-                Service Description
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600 text-sm">
-                NexaraX is an AI-powered content creation platform that helps users generate images, videos, and social
-                media content. Our services include:
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• AI image generation</li>
-                <li>• AI video creation</li>
-                <li>• Content scheduling and publishing</li>
-                <li>• Social media management tools</li>
-                <li>• Analytics and insights</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* User Responsibilities */}
-          <Card className="border-2 border-green-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Scale className="h-5 w-5 text-green-600" />
-                User Responsibilities
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600 text-sm mb-3">You agree to:</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Provide accurate and complete information</li>
-                <li>• Use our services in compliance with applicable laws</li>
-                <li>• Not use our services for illegal or harmful purposes</li>
-                <li>• Respect intellectual property rights</li>
-                <li>• Not attempt to reverse engineer our technology</li>
-                <li>• Keep your account credentials secure</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Prohibited Uses */}
-          <Card className="border-2 border-red-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
-                Prohibited Uses
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600 text-sm mb-3">You may not use NexaraX to:</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Create harmful, offensive, or illegal content</li>
-                <li>• Violate copyright or intellectual property rights</li>
-                <li>• Spread misinformation or fake news</li>
-                <li>• Harass, threaten, or harm others</li>
-                <li>• Attempt to hack or disrupt our services</li>
-                <li>• Create content that violates platform policies</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Intellectual Property */}
-          <Card className="border-2 border-orange-100">
-            <CardHeader>
-              <CardTitle>Intellectual Property</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Your Content</h3>
-                <p className="text-gray-600 text-sm">
-                  You retain ownership of content you create using NexaraX. However, you grant us a license to process
-                  and store your content to provide our services.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Our Platform</h3>
-                <p className="text-gray-600 text-sm">
-                  NexaraX and its technology are protected by intellectual property laws. You may not copy, modify, or
-                  distribute our platform without permission.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Limitation of Liability */}
-          <Card className="border-2 border-gray-100">
-            <CardHeader>
-              <CardTitle>Limitation of Liability</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm">
-                NexaraX is provided "as is" without warranties. We are not liable for any damages arising from your use
-                of our services, including but not limited to direct, indirect, incidental, or consequential damages.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Termination */}
-          <Card className="border-2 border-yellow-100">
-            <CardHeader>
-              <CardTitle>Termination</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm">
-                We may terminate or suspend your access to NexaraX at any time for violation of these terms. You may
-                also terminate your account at any time by contacting us.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Contact Information */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <CardTitle>Contact Us</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm mb-4">
-                If you have questions about these Terms of Service, please contact us:
-              </p>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm">
-                  <strong>Email:</strong> legal@nexarax.com
-                  <br />
-                  <strong>General Contact:</strong> hello@nexarax.com
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      </main>
     </div>
   )
 }

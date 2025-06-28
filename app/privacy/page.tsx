@@ -1,162 +1,133 @@
-"use client"
-
+import { Brain, ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Shield, Eye, Lock, Users } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 export default function PrivacyPage() {
-  const router = useRouter()
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <Button variant="ghost" onClick={() => router.push("/")} className="mb-6 hover:bg-blue-50">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Home
-        </Button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="container mx-auto px-4 py-6">
+        <nav className="flex items-center justify-between">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              NexaraX
+            </span>
+          </Link>
+          <Link href="/">
+            <Button variant="ghost">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </nav>
+      </header>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 bg-blue-100 text-blue-800">🔒 Privacy Policy</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      {/* Privacy Policy Content */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Privacy Policy
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Your privacy is important to us. Here's how we protect and handle your data.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">Last updated: January 2025</p>
-        </div>
 
-        <div className="space-y-8">
-          {/* Information We Collect */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Eye className="h-5 w-5 text-blue-600" />
-                Information We Collect
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Personal Information</h3>
-                <p className="text-gray-600 text-sm">
-                  When you sign up for our waitlist or contact us, we collect your name and email address. This helps us
-                  communicate with you about NexaraX updates and respond to your inquiries.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Usage Data</h3>
-                <p className="text-gray-600 text-sm">
-                  We collect information about how you interact with our website, including pages visited, time spent,
-                  and browser information. This helps us improve our service.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="prose prose-lg max-w-none">
+            <p className="text-gray-600 mb-8">
+              <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+            </p>
 
-          {/* How We Use Your Information */}
-          <Card className="border-2 border-green-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-green-600" />
-                How We Use Your Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Send you updates about NexaraX launch and features</li>
-                <li>• Respond to your questions and support requests</li>
-                <li>• Improve our website and services</li>
-                <li>• Analyze usage patterns to enhance user experience</li>
-                <li>• Comply with legal obligations</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Data Protection */}
-          <Card className="border-2 border-purple-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-purple-600" />
-                Data Protection
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Security Measures</h3>
-                <p className="text-gray-600 text-sm">
-                  We implement industry-standard security measures to protect your personal information, including
-                  encryption, secure servers, and regular security audits.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Data Retention</h3>
-                <p className="text-gray-600 text-sm">
-                  We retain your information only as long as necessary to provide our services and comply with legal
-                  obligations. You can request deletion of your data at any time.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Your Rights */}
-          <Card className="border-2 border-orange-100">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="h-5 w-5 text-orange-600" />
-                Your Rights
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600 text-sm mb-3">You have the right to:</p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>• Access your personal data we hold</li>
-                <li>• Correct inaccurate or incomplete data</li>
-                <li>• Delete your personal data</li>
-                <li>• Object to processing of your data</li>
-                <li>• Data portability</li>
-                <li>• Withdraw consent at any time</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Contact Information */}
-          <Card className="border-2 border-gray-100">
-            <CardHeader>
-              <CardTitle>Contact Us About Privacy</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm mb-4">
-                If you have questions about this Privacy Policy or how we handle your data, please contact us:
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">1. Information We Collect</h2>
+              <p className="text-gray-700 mb-4">
+                We collect information you provide directly to us, such as when you create an account, join our
+                waitlist, or contact us for support.
               </p>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm">
-                  <strong>Email:</strong> privacy@nexarax.com
-                  <br />
-                  <strong>General Contact:</strong> hello@nexarax.com
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Email address and contact information</li>
+                <li>Account credentials and profile information</li>
+                <li>Communications with our support team</li>
+                <li>Usage data and analytics</li>
+              </ul>
+            </section>
 
-          {/* Updates */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <CardTitle>Policy Updates</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 text-sm">
-                We may update this Privacy Policy from time to time. We will notify you of any significant changes by
-                email or through our website. Your continued use of our services after such modifications constitutes
-                acceptance of the updated Privacy Policy.
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">2. How We Use Your Information</h2>
+              <p className="text-gray-700 mb-4">
+                We use the information we collect to provide, maintain, and improve our services:
               </p>
-            </CardContent>
-          </Card>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>To provide and operate the NexaraX platform</li>
+                <li>To send you updates about our service and new features</li>
+                <li>To respond to your comments, questions, and customer service requests</li>
+                <li>To analyze usage patterns and improve our platform</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">3. Information Sharing</h2>
+              <p className="text-gray-700 mb-4">
+                We do not sell, trade, or otherwise transfer your personal information to third parties without your
+                consent, except as described in this policy:
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>With service providers who assist us in operating our platform</li>
+                <li>When required by law or to protect our rights</li>
+                <li>In connection with a merger, acquisition, or sale of assets</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">4. Data Security</h2>
+              <p className="text-gray-700 mb-4">
+                We implement appropriate security measures to protect your personal information against unauthorized
+                access, alteration, disclosure, or destruction. However, no method of transmission over the internet is
+                100% secure.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">5. Your Rights</h2>
+              <p className="text-gray-700 mb-4">You have the right to:</p>
+              <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Access and update your personal information</li>
+                <li>Delete your account and associated data</li>
+                <li>Opt out of marketing communications</li>
+                <li>Request a copy of your data</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">6. Cookies and Tracking</h2>
+              <p className="text-gray-700 mb-4">
+                We use cookies and similar tracking technologies to enhance your experience on our platform. You can
+                control cookie settings through your browser preferences.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">7. Changes to This Policy</h2>
+              <p className="text-gray-700 mb-4">
+                We may update this privacy policy from time to time. We will notify you of any changes by posting the
+                new policy on this page and updating the "Last updated" date.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900">8. Contact Us</h2>
+              <p className="text-gray-700 mb-4">
+                If you have any questions about this privacy policy, please contact us at:
+              </p>
+              <p className="text-gray-700">
+                Email:{" "}
+                <a href="mailto:privacy@nexarax.com" className="text-blue-600 hover:text-blue-700">
+                  privacy@nexarax.com
+                </a>
+              </p>
+            </section>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
