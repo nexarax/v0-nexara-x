@@ -11,7 +11,6 @@ export async function submitContactForm(formData: FormData) {
     const subject = formData.get("subject") as string
     const message = formData.get("message") as string
 
-    // Validate required fields
     if (!name || !email || !subject || !message) {
       return {
         success: false,
@@ -32,15 +31,14 @@ export async function submitContactForm(formData: FormData) {
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Subject:</strong> ${subject}</p>
           </div>
-          <div style="background: #ffffff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h3 style="color: #374151; margin-top: 0;">Message:</h3>
-            <p style="color: #6b7280; line-height: 1.6;">${message.replace(/\n/g, "<br>")}</p>
+          <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <h3 style="color: #1e293b; margin-top: 0;">Message:</h3>
+            <p style="line-height: 1.6; color: #475569;">${message.replace(/\n/g, "<br>")}</p>
           </div>
-          <div style="margin-top: 20px; padding: 15px; background: #eff6ff; border-radius: 8px;">
-            <p style="margin: 0; color: #1e40af; font-size: 14px;">
-              This message was sent from the NexaraX contact form.
-            </p>
-          </div>
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+          <p style="color: #64748b; font-size: 14px;">
+            This email was sent from the NexaraX contact form.
+          </p>
         </div>
       `,
     })

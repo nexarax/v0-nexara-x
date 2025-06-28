@@ -66,9 +66,9 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {/* Main Content Grid */}
+        {/* Main Content Grid - CORRECTED: Support on LEFT, Form on RIGHT */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column */}
+          {/* LEFT Column - Support Info */}
           <div className="space-y-6">
             {/* Get Support Card */}
             <Card className="bg-white/80 backdrop-blur-sm border-blue-100">
@@ -128,7 +128,7 @@ export default function ContactPage() {
             </Card>
           </div>
 
-          {/* Right Column - Contact Form */}
+          {/* RIGHT Column - Contact Form */}
           <Card className="bg-white/80 backdrop-blur-sm border-blue-100">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
