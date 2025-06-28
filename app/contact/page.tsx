@@ -2,211 +2,272 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Mail, MessageCircle, Send } from "lucide-react"
-import Link from "next/link"
+import { Zap, Mail, MessageSquare, ArrowLeft, Home, Send, CheckCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { submitContactForm } from "./actions"
-import { useToast } from "@/hooks/use-toast"
 
 export default function ContactPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  const router = useRouter()
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  async function handleSubmit(formData: FormData) {
-    setIsSubmitting(true)
+  const handleSubmit = async (formData: FormData) => {
+    setIsLoading(true)
     try {
-      const result = await submitContactForm(formData)
-      if (result.success) {
-        toast({
-          title: "Message sent successfully!",
-          description: "We'll get back to you within 24 hours.",
-        })
-        // Reset form
-        const form = document.getElementById("contact-form") as HTMLFormElement
-        form?.reset()
-      } else {
-        toast({
-          title: "Failed to send message",
-          description: result.error || "Please try again later.",
-          variant: "destructive",
-        })
-      }
+      await submitContactForm(formData)
+      setIsSubmitted(true)
     } catch (error) {
-      toast({
-        title: "Failed to send message",
-        description: "Please try again later.",
-        variant: "destructive",
-      })
+      console.error("Error submitting form:", error)
     } finally {
-      setIsSubmitting(false)
+      setIsLoading(false)
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
         {/* Header */}
-        <div className="text-center mb-12">
-          <Link href="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6">
-            <ArrowLeft className="w-4 h-4" />
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-200">
-              Get In Touch
-            </Badge>
-          </Link>
+        <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900">NexaraX</span>
+            </div>
+            <nav className="hidden md:flex items-center space-x-8">
+              <Button variant="ghost" onClick={() => router.push("/")}>
+                Home
+              </Button>
+              <Button variant="ghost" onClick={() => router.push("/contact")}>
+                Contact
+              </Button>
+            </nav>
+          </div>
+        </header>
 
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Contact NexaraX
+        <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-12 shadow-lg border-2 border-green-200">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
+            <h1 className="text-3xl font-bold mb-4 text-gray-900">Message Sent Successfully!</h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Thank you for contacting us. We'll get back to you within 24 hours.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => router.push("/")}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Return to Homepage
+              </Button>
+              <Button variant="outline" onClick={() => setIsSubmitted(false)}>
+                Send Another Message
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <Zap className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold text-gray-900">NexaraX</span>
+          </div>
+          <nav className="hidden md:flex items-center space-x-8">
+            <Button variant="ghost" onClick={() => router.push("/")}>
+              Home
+            </Button>
+            <Button variant="ghost" onClick={() => router.push("/contact")}>
+              Contact
+            </Button>
+          </nav>
+        </div>
+      </header>
+
+      {/* Breadcrumb */}
+      <div className="container mx-auto px-4 py-6">
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/")}
+          className="text-blue-600 hover:text-blue-700 p-0 h-auto font-normal"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        <div className="text-center mb-16">
+          <Badge className="mb-6 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 border-blue-200">
+            💬 Get in Touch
+          </Badge>
+          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Contact Us
           </h1>
-
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions about our AI-powered content creation platform? We'd love to hear from you!
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Have questions about NexaraX? We're here to help you succeed with AI-powered social media marketing.
           </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Left Column - Support Info */}
-          <div className="space-y-6">
-            {/* Get Support Card */}
-            <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Mail className="w-6 h-6 text-blue-600" />
-                  <h2 className="text-2xl font-bold text-gray-900">Get Support</h2>
-                </div>
-                <p className="text-gray-600 mb-6">Our team typically responds within 24 hours</p>
-
-                <div className="space-y-4">
-                  {/* Email Support */}
-                  <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Mail className="w-5 h-5 text-blue-600" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <Card className="border-2 border-blue-100 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl">Send us a message</CardTitle>
+                <CardDescription>Fill out the form below and we'll get back to you within 24 hours.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form action={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input id="firstName" name="firstName" placeholder="John" required />
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Email Support</h3>
-                      <p className="text-gray-600">hello@nexarax.com</p>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input id="lastName" name="lastName" placeholder="Doe" required />
                     </div>
                   </div>
-
-                  {/* Live Chat */}
-                  <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-lg">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <MessageCircle className="w-5 h-5 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Live Chat</h3>
-                      <p className="text-gray-600">Coming Soon</p>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" name="email" type="email" placeholder="john@example.com" required />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Common Questions Card */}
-            <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Common Questions</h2>
-
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">How does the AI generation work?</h3>
-                    <p className="text-gray-600 text-sm">
-                      Our AI uses advanced models to create images, videos, and content from your prompts.
-                    </p>
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Company (Optional)</Label>
+                    <Input id="company" name="company" placeholder="Your Company" />
                   </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">When will NexaraX launch?</h3>
-                    <p className="text-gray-600 text-sm">
-                      We're launching very soon! Join our waitlist to be notified first.
-                    </p>
+                  <div className="space-y-2">
+                    <Label htmlFor="subject">Subject</Label>
+                    <Input id="subject" name="subject" placeholder="How can we help you?" required />
                   </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Will there be a free plan?</h3>
-                    <p className="text-gray-600 text-sm">Yes! We'll offer both free and premium plans at launch.</p>
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      placeholder="Tell us more about your needs..."
+                      rows={6}
+                      required
+                    />
                   </div>
-                </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>
 
-          {/* Right Column - Contact Form */}
-          <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Send className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-900">Send us a Message</h2>
-              </div>
-              <p className="text-gray-600 mb-6">Fill out the form below and we'll get back to you soon</p>
-
-              <form id="contact-form" action={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
-                    Full Name <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="fullName"
-                    name="fullName"
-                    type="text"
-                    placeholder="Your full name"
-                    required
-                    className="mt-1"
-                  />
+          {/* Contact Info & Quick Links */}
+          <div className="space-y-6">
+            {/* Contact Information */}
+            <Card className="border-2 border-purple-100 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-xl">Contact Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <Mail className="w-5 h-5 text-blue-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Email</p>
+                    <p className="text-gray-600">hello@nexarax.com</p>
+                  </div>
                 </div>
-
-                <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email Address <span className="text-red-500">*</span>
-                  </Label>
-                  <Input id="email" name="email" type="email" placeholder="your@email.com" required className="mt-1" />
+                <div className="flex items-start space-x-3">
+                  <MessageSquare className="w-5 h-5 text-purple-600 mt-1" />
+                  <div>
+                    <p className="font-medium">Live Chat</p>
+                    <p className="text-gray-600">Coming Soon</p>
+                  </div>
                 </div>
+              </CardContent>
+            </Card>
 
-                <div>
-                  <Label htmlFor="subject" className="text-sm font-medium text-gray-700">
-                    Subject <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    placeholder="What's this about?"
-                    required
-                    className="mt-1"
-                  />
+            {/* Launch Notice */}
+            <Card className="border-2 border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50">
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <Zap className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
+                  <h3 className="font-bold mb-2 text-yellow-800">Launching Soon!</h3>
+                  <p className="text-sm text-yellow-700 mb-4">
+                    NexaraX is currently in development. Contact us to be notified when we launch!
+                  </p>
+                  <Button
+                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white"
+                    onClick={() => router.push("/")}
+                  >
+                    Join Waitlist
+                  </Button>
                 </div>
-
-                <div>
-                  <Label htmlFor="message" className="text-sm font-medium text-gray-700">
-                    Message <span className="text-red-500">*</span>
-                  </Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Tell us more about your question or feedback..."
-                    required
-                    rows={5}
-                    className="mt-1 resize-none"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4 mt-20">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold">NexaraX</span>
+            </div>
+            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+              Transform your social media presence with AI-powered content creation.
+            </p>
+            <div className="flex justify-center space-x-8 mb-8">
+              <Button variant="link" className="text-gray-400 hover:text-white p-0">
+                Privacy
+              </Button>
+              <Button variant="link" className="text-gray-400 hover:text-white p-0">
+                Terms
+              </Button>
+              <Button
+                variant="link"
+                className="text-gray-400 hover:text-white p-0"
+                onClick={() => router.push("/contact")}
+              >
+                Contact
+              </Button>
+            </div>
+            <div className="border-t border-gray-800 pt-8">
+              <p className="text-gray-500">&copy; 2025 NexaraX. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
