@@ -191,32 +191,30 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Zap className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-slate-900">NexaraX</span>
+      <footer className="bg-slate-900 text-white py-12 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Zap className="h-5 w-5 text-white" />
             </div>
-
-            <div className="flex items-center space-x-6 text-sm text-slate-600">
-              <Link href="/privacy" className="hover:text-slate-900 transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-slate-900 transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="/contact" className="hover:text-slate-900 transition-colors">
-                Contact Us
-              </Link>
-            </div>
+            <span className="text-xl font-bold">NexaraX</span>
           </div>
 
-          <div className="text-center mt-6 pt-6 border-t border-slate-200">
-            <p className="text-slate-500">© 2024 NexaraX. All rights reserved.</p>
+          <p className="text-slate-400 mb-8">Transform your social media presence with AI-powered content creation.</p>
+
+          <div className="flex justify-center space-x-6 text-sm text-slate-400 mb-6">
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/contact" className="hover:text-white transition-colors">
+              Contact Us
+            </Link>
           </div>
+
+          <p className="text-slate-500">© 2025 NexaraX. All rights reserved.</p>
         </div>
       </footer>
     </div>
