@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-8">Privacy Policy</h1>
-          <p className="text-slate-600 mb-8">Last updated: December 30, 2024</p>
+          <p className="text-slate-600 mb-8">Last updated: June 30, 2025</p>
 
           <div className="prose prose-slate max-w-none">
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">1. Information We Collect</h2>
@@ -121,11 +121,7 @@ export default function PrivacyPage() {
             <p className="text-slate-700 mb-4">
               If you have any questions about this privacy policy, please contact us at:
             </p>
-            <p className="text-slate-700">
-              Email: privacy@nexarax.com
-              <br />
-              Address: [Your Business Address]
-            </p>
+            <p className="text-slate-700">Email: privacy@nexarax.com</p>
           </div>
         </div>
       </div>
