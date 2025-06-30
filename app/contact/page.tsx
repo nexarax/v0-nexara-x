@@ -11,104 +11,61 @@ import { Badge } from "@/components/ui/badge"
 import { Zap, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import { handleContactForm, handleWaitlistSignup } from "@/app/actions/email-actions"
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    company: "",
-    subject: "",
-    message: "",
-  })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [waitlistEmail, setWaitlistEmail] = useState("")
   const [isWaitlistSubmitting, setIsWaitlistSubmitting] = useState(false)
   const { toast } = useToast()
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    try {
-      // Log the contact form data
-      const contactData = {
-        to: "hello@nexarax.com",
-        emailSubject: `Contact Form: ${formData.subject}`,
-        timestamp: new Date().toISOString(),
-        ...formData,
-      }
+    const formData = new FormData(e.currentTarget)
+    const result = await handleContactForm(formData)
 
-      console.log("Contact Form Submission:", contactData)
-
-      // Simulate delay
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
+    if (result.success) {
       toast({
         title: "Message sent successfully! ✅",
-        description: "We'll get back to you within 24 hours.",
+        description: result.message,
       })
-
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        company: "",
-        subject: "",
-        message: "",
-      })
-    } catch (error) {
+      e.currentTarget.reset()
+    } else {
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: result.error,
         variant: "destructive",
       })
-    } finally {
-      setIsSubmitting(false)
     }
+
+    setIsSubmitting(false)
   }
 
-  const handleWaitlistSignup = async (e: React.FormEvent) => {
+  const handleWaitlist = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsWaitlistSubmitting(true)
 
-    try {
-      // Log the waitlist signup
-      const waitlistData = {
-        to: "hello@nexarax.com",
-        email: waitlistEmail,
-        source: "contact-page",
-        timestamp: new Date().toISOString(),
-        emailSubject: `New Waitlist Signup - ${waitlistEmail}`,
-      }
+    const formData = new FormData(e.currentTarget)
+    formData.append("source", "contact-page")
 
-      console.log("Waitlist Signup:", waitlistData)
+    const result = await handleWaitlistSignup(formData)
 
-      // Simulate delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
+    if (result.success) {
       toast({
         title: "Added to waitlist! 🎉",
-        description: "You'll be notified when we launch!",
+        description: result.message,
       })
-
-      setWaitlistEmail("")
-    } catch (error) {
+      e.currentTarget.reset()
+    } else {
       toast({
         title: "Error",
-        description: "Failed to join waitlist. Please try again.",
+        description: result.error,
         variant: "destructive",
       })
-    } finally {
-      setIsWaitlistSubmitting(false)
     }
+
+    setIsWaitlistSubmitting(false)
   }
 
   return (
@@ -168,27 +125,13 @@ export default function ContactPage() {
                         <label htmlFor="firstName" className="block text-sm font-medium text-slate-700 mb-2">
                           First Name
                         </label>
-                        <Input
-                          id="firstName"
-                          name="firstName"
-                          placeholder="John"
-                          value={formData.firstName}
-                          onChange={handleInputChange}
-                          required
-                        />
+                        <Input id="firstName" name="firstName" placeholder="John" required />
                       </div>
                       <div>
                         <label htmlFor="lastName" className="block text-sm font-medium text-slate-700 mb-2">
                           Last Name
                         </label>
-                        <Input
-                          id="lastName"
-                          name="lastName"
-                          placeholder="Doe"
-                          value={formData.lastName}
-                          onChange={handleInputChange}
-                          required
-                        />
+                        <Input id="lastName" name="lastName" placeholder="Doe" required />
                       </div>
                     </div>
 
@@ -196,42 +139,21 @@ export default function ContactPage() {
                       <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                         Email
                       </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <Input id="email" name="email" type="email" placeholder="john@example.com" required />
                     </div>
 
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
                         Company (Optional)
                       </label>
-                      <Input
-                        id="company"
-                        name="company"
-                        placeholder="Your Company"
-                        value={formData.company}
-                        onChange={handleInputChange}
-                      />
+                      <Input id="company" name="company" placeholder="Your Company" />
                     </div>
 
                     <div>
                       <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-2">
                         Subject
                       </label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        placeholder="How can we help you?"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <Input id="subject" name="subject" placeholder="How can we help you?" required />
                     </div>
 
                     <div>
@@ -243,8 +165,6 @@ export default function ContactPage() {
                         name="message"
                         placeholder="Tell us more about your needs..."
                         rows={6}
-                        value={formData.message}
-                        onChange={handleInputChange}
                         required
                       />
                     </div>
@@ -302,14 +222,8 @@ export default function ContactPage() {
                     NexaraX is currently in development. Contact us to be notified when we launch!
                   </p>
 
-                  <form onSubmit={handleWaitlistSignup} className="space-y-3">
-                    <Input
-                      type="email"
-                      placeholder="your@email.com"
-                      value={waitlistEmail}
-                      onChange={(e) => setWaitlistEmail(e.target.value)}
-                      required
-                    />
+                  <form onSubmit={handleWaitlist} className="space-y-3">
+                    <Input type="email" name="email" placeholder="your@email.com" required />
                     <Button
                       type="submit"
                       className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
