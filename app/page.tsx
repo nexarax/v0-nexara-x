@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Check, Zap, BarChart3, Bot, Users, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
-import { sendWaitlistEmail } from "./actions/email"
+import { sendWaitlistEmail } from "@/app/actions/email"
 
 export default function HomePage() {
   const [email, setEmail] = useState("")
