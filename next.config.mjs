@@ -4,14 +4,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     unoptimized: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
+  // Updated for Next.js 15+ - moved from experimental
+  serverExternalPackages: [],
+  
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
