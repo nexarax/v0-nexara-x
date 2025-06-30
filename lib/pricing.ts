@@ -1,0 +1,102 @@
+export const PRICING_TIERS = {
+  FREE: {
+    name: "Starter",
+    price: 0,
+    credits: 100,
+    features: {
+      dashboard: true,
+      basicCRM: true,
+      basicEcommerce: true,
+      basicBooking: true,
+      aiImageGeneration: 10, // per month
+      aiCopywriting: 20,
+      templateAccess: "basic",
+      storage: "1GB",
+      users: 1,
+    },
+  },
+  BASIC: {
+    name: "Professional",
+    price: 29,
+    credits: 500,
+    features: {
+      dashboard: true,
+      fullCRM: true,
+      fullEcommerce: true,
+      fullBooking: true,
+      aiImageGeneration: 100,
+      aiVideoCreation: 10,
+      aiMusicGeneration: 20,
+      aiCopywriting: 200,
+      templateAccess: "professional",
+      logoCreator: true,
+      storage: "10GB",
+      users: 5,
+    },
+  },
+  PRO: {
+    name: "Business",
+    price: 99,
+    credits: 2000,
+    features: {
+      dashboard: true,
+      fullCRM: true,
+      fullEcommerce: true,
+      fullBooking: true,
+      blogCMS: true,
+      aiImageGeneration: 500,
+      aiVideoCreation: 50,
+      aiMusicGeneration: 100,
+      aiCopywriting: 1000,
+      templateAccess: "premium",
+      logoCreator: true,
+      bannerCreator: true,
+      storage: "100GB",
+      users: 25,
+      analytics: "advanced",
+    },
+  },
+  ENTERPRISE: {
+    name: "Enterprise",
+    price: 299,
+    credits: 10000,
+    features: {
+      dashboard: true,
+      fullCRM: true,
+      fullEcommerce: true,
+      fullBooking: true,
+      blogCMS: true,
+      socialPlatform: true,
+      learningManagement: true,
+      aiImageGeneration: "unlimited",
+      aiVideoCreation: "unlimited",
+      aiMusicGeneration: "unlimited",
+      aiCopywriting: "unlimited",
+      templateAccess: "enterprise",
+      logoCreator: true,
+      bannerCreator: true,
+      storage: "1TB",
+      users: "unlimited",
+      analytics: "enterprise",
+      whiteLabel: true,
+    },
+  },
+} as const
+
+export const CREDIT_COSTS = {
+  aiImageGeneration: 5,
+  aiVideoCreation: 25,
+  aiMusicGeneration: 10,
+  aiCopywriting: 2,
+  templateDownload: 1,
+  extraStorage: 1, // per GB
+  additionalUser: 50, // per month
+} as const
+
+export const CREDIT_PACKAGES = [
+  { credits: 100, price: 9.99, bonus: 0 },
+  { credits: 500, price: 39.99, bonus: 50 },
+  { credits: 1000, price: 69.99, bonus: 150 },
+  { credits: 2500, price: 149.99, bonus: 500 },
+  { credits: 5000, price: 249.99, bonus: 1000 },
+] as const
