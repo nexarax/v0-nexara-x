@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Zap, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import { sendContactEmail, sendWaitlistEmail } from "../actions/email"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [waitlistEmail, setWaitlistEmail] = useState("")
+  const [isWaitlistSubmitting, setIsWaitlistSubmitting] = useState(false)
   const { toast } = useToast()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,37 +38,78 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const form = new FormData()
+      Object.entries(formData).forEach(([key, value]) => {
+        form.append(key, value)
+      })
 
-    toast({
-      title: "Message sent successfully! ✅",
-      description: "We'll get back to you within 24 hours.",
-    })
+      const result = await sendContactEmail(form)
 
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      company: "",
-      subject: "",
-      message: "",
-    })
-    setIsSubmitting(false)
+      if (result.success) {
+        toast({
+          title: "Message sent successfully! ✅",
+          description: "We'll get back to you within 24 hours.",
+        })
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          company: "",
+          subject: "",
+          message: "",
+        })
+      } else {
+        toast({
+          title: "Failed to send message",
+          description: result.message,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleWaitlistSignup = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsWaitlistSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const form = new FormData()
+      form.append("email", waitlistEmail)
+      form.append("source", "contact-page")
 
-    toast({
-      title: "Added to waitlist! 🎉",
-      description: "You'll be notified when we launch!",
-    })
+      const result = await sendWaitlistEmail(form)
 
-    setWaitlistEmail("")
+      if (result.success) {
+        toast({
+          title: "Added to waitlist! 🎉",
+          description: "You'll be notified when we launch!",
+        })
+        setWaitlistEmail("")
+      } else {
+        toast({
+          title: "Failed to join waitlist",
+          description: result.message,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to join waitlist. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsWaitlistSubmitting(false)
+    }
   }
 
   return (
@@ -271,8 +314,9 @@ export default function ContactPage() {
                     <Button
                       type="submit"
                       className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
+                      disabled={isWaitlistSubmitting}
                     >
-                      Join Waitlist
+                      {isWaitlistSubmitting ? "Joining..." : "Join Waitlist"}
                     </Button>
                   </form>
                 </CardContent>
