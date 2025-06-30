@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Check, Zap, BarChart3, Bot, Users, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import { sendWaitlistEmail } from "./actions/email"
 
 export default function HomePage() {
   const [email, setEmail] = useState("")
@@ -20,16 +21,35 @@ export default function HomePage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const formData = new FormData()
+      formData.append("email", email)
+      formData.append("source", "homepage")
 
-    toast({
-      title: "Welcome to the waitlist! 🎉",
-      description: "You'll be the first to know when NexaraX launches.",
-    })
+      const result = await sendWaitlistEmail(formData)
 
-    setEmail("")
-    setIsSubmitting(false)
+      if (result.success) {
+        toast({
+          title: "Welcome to the waitlist! 🎉",
+          description: "You'll be the first to know when NexaraX launches.",
+        })
+        setEmail("")
+      } else {
+        toast({
+          title: "Oops! Something went wrong",
+          description: result.message,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to join waitlist. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
