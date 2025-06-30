@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Zap, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
-import { sendContactEmail, sendWaitlistEmail } from "../actions/email"
+import { sendContactEmail, sendWaitlistEmail } from "@/app/actions/email"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
