@@ -1,0 +1,11 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/email-sequences",
+      "schedule": "0 9 * * *"
+    }
+  ],
+  "env": {
+    "CRON_SECRET": "cron6m4xTBXzoYkikV8ceGcxWDVTgarMMA9StwXgMuet6veMfq2Axo74WQb7UCtJikUuQl5cVzHpEjm69nQpxr3cWA0kwRZuTlMk9aI8leSodERsQXpIhp3PynbUyzgo"
+  }
+}
