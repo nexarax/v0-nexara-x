@@ -59,6 +59,14 @@ export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: st
           color: #3b82f6; 
           text-decoration: none; 
         }
+        .debug { 
+          background: #f1f5f9; 
+          padding: 10px; 
+          border-radius: 4px; 
+          font-size: 12px; 
+          color: #64748b; 
+          margin: 10px 0; 
+        }
       </style>
     </head>
     <body>
@@ -123,6 +131,14 @@ export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: st
             <a href="#">💼 LinkedIn</a>
             <a href="#">📱 Discord Community</a>
           </div>
+
+          <div class="debug">
+            <strong>🔧 Debug Info:</strong><br>
+            Email: ${data.email}<br>
+            Name: ${name}<br>
+            Sent: ${new Date().toISOString()}<br>
+            Template: waitlist-welcome-v1
+          </div>
         </div>
         <div class="footer">
           <p>🚀 <strong>NexaraX</strong> - AI-Powered Social Media Revolution</p>
@@ -183,6 +199,14 @@ export function getWaitlistBehindScenesTemplate(data: { email: string; firstName
           color: #64748b; 
           font-size: 14px; 
         }
+        .debug { 
+          background: #f1f5f9; 
+          padding: 10px; 
+          border-radius: 4px; 
+          font-size: 12px; 
+          color: #64748b; 
+          margin: 10px 0; 
+        }
       </style>
     </head>
     <body>
@@ -233,6 +257,15 @@ export function getWaitlistBehindScenesTemplate(data: { email: string; firstName
               <li>📊 <strong>89% accuracy</strong> in viral content prediction</li>
               <li>💰 <strong>250% ROI improvement</strong> on social media spend</li>
             </ul>
+          </div>
+
+          <div class="debug">
+            <strong>🔧 Debug Info:</strong><br>
+            Email: ${data.email}<br>
+            Name: ${name}<br>
+            Sent: ${new Date().toISOString()}<br>
+            Template: waitlist-behind-scenes-v1<br>
+            Trigger: Cron job (3 days after signup)
           </div>
         </div>
         <div class="footer">
@@ -305,6 +338,14 @@ export function getContactConfirmationTemplate(data: {
           color: #64748b; 
           font-size: 14px; 
         }
+        .debug { 
+          background: #f1f5f9; 
+          padding: 10px; 
+          border-radius: 4px; 
+          font-size: 12px; 
+          color: #64748b; 
+          margin: 10px 0; 
+        }
       </style>
     </head>
     <body>
@@ -358,6 +399,15 @@ export function getContactConfirmationTemplate(data: {
             <h3>🎁 Special Offer</h3>
             <p>Since you reached out, you're eligible for <strong>50% off</strong> your first 3 months when we launch!</p>
             <p><small>We'll include this discount in our response.</small></p>
+          </div>
+
+          <div class="debug">
+            <strong>🔧 Debug Info:</strong><br>
+            Name: ${data.firstName} ${data.lastName}<br>
+            Email: ${data.email}<br>
+            Subject: ${data.subject}<br>
+            Sent: ${new Date().toISOString()}<br>
+            Template: contact-confirmation-v1
           </div>
         </div>
         <div class="footer">
