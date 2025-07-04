@@ -2,7 +2,23 @@
 
 import { sendEmail, createContactEmailHTML, createWaitlistEmailHTML } from "@/lib/resend-client"
 
-export async function handleContactForm(formData: FormData) {
+// Define the expected return type for our functions
+interface ActionResult {
+  success: boolean
+  message?: string
+  error?: string
+  debug?: any
+}
+
+// Define the sendEmail result type to match what it actually returns
+interface SendEmailResult {
+  success: boolean
+  data?: any
+  error?: string
+  details?: any
+}
+
+export async function handleContactForm(formData: FormData): Promise<ActionResult> {
   console.log("🚀 Contact form submission started")
 
   try {
@@ -23,7 +39,7 @@ export async function handleContactForm(formData: FormData) {
 
     // Send notification email (to you) - this is the critical one
     console.log("📧 Sending notification email to hello@nexarax.com...")
-    const notificationResult = await sendEmail({
+    const notificationResult: SendEmailResult = await sendEmail({
       to: "hello@nexarax.com",
       subject: `Contact Form: ${subject}`,
       html: createContactEmailHTML({
@@ -40,7 +56,7 @@ export async function handleContactForm(formData: FormData) {
 
     // Send customer confirmation (secondary)
     console.log("📧 Sending customer confirmation...")
-    let customerResult = { success: false, error: "Not attempted" }
+    let customerResult: SendEmailResult = { success: false, error: "Not attempted" }
 
     try {
       const { getContactConfirmationTemplate } = await import("@/lib/email-templates")
@@ -95,7 +111,7 @@ export async function handleContactForm(formData: FormData) {
   }
 }
 
-export async function handleWaitlistSignup(formData: FormData) {
+export async function handleWaitlistSignup(formData: FormData): Promise<ActionResult> {
   console.log("🎯 Waitlist signup started")
 
   try {
@@ -118,7 +134,7 @@ export async function handleWaitlistSignup(formData: FormData) {
 
     // Send notification email (to you) - this is the critical one
     console.log("📧 Sending waitlist notification to hello@nexarax.com...")
-    const notificationResult = await sendEmail({
+    const notificationResult: SendEmailResult = await sendEmail({
       to: "hello@nexarax.com",
       subject: `🎉 New Waitlist Signup - ${email}`,
       html: createWaitlistEmailHTML({ email, source }),
@@ -128,7 +144,7 @@ export async function handleWaitlistSignup(formData: FormData) {
 
     // Send customer welcome (secondary)
     console.log("🎉 Sending customer welcome...")
-    let customerResult = { success: false, error: "Not attempted" }
+    let customerResult: SendEmailResult = { success: false, error: "Not attempted" }
 
     try {
       const { getWaitlistWelcomeTemplate } = await import("@/lib/email-templates")
