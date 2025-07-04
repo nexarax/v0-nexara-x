@@ -1,5 +1,5 @@
 export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: string }) {
-  const name = data.firstName || "there"
+  const name = data.firstName && data.firstName !== "test" ? data.firstName : "there"
 
   return `
     <!DOCTYPE html>
@@ -126,10 +126,9 @@ export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: st
 
           <div class="social-links">
             <p><strong>Stay Connected:</strong></p>
-            <a href="#">📧 Email Updates</a>
-            <a href="#">🐦 Twitter</a>
-            <a href="#">💼 LinkedIn</a>
-            <a href="#">📱 Discord Community</a>
+            <a href="https://instagram.com/nexarax_official" target="_blank">📱 Instagram</a>
+            <a href="https://tiktok.com/@nexarax.ai" target="_blank">🎵 TikTok</a>
+            <a href="https://x.com/NexaraX" target="_blank">🐦 X (Twitter)</a>
           </div>
 
           <div class="debug">
@@ -152,7 +151,7 @@ export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: st
 }
 
 export function getWaitlistBehindScenesTemplate(data: { email: string; firstName?: string }) {
-  const name = data.firstName || "there"
+  const name = data.firstName && data.firstName !== "test" ? data.firstName : "there"
 
   return `
     <!DOCTYPE html>
@@ -382,23 +381,6 @@ export function getContactConfirmationTemplate(data: {
                 <strong>Follow-up:</strong> We'll schedule a call if needed to discuss your requirements
               </div>
             </div>
-          </div>
-
-          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3>🚀 While You Wait:</h3>
-            <p>Check out what makes NexaraX different:</p>
-            <ul>
-              <li>🤖 <strong>AI-Powered Content:</strong> Generate posts that actually engage</li>
-              <li>📊 <strong>Predictive Analytics:</strong> Know what will go viral before you post</li>
-              <li>⚡ <strong>Smart Automation:</strong> Save 15+ hours per week</li>
-              <li>🎯 <strong>Audience Insights:</strong> Understand your followers like never before</li>
-            </ul>
-          </div>
-
-          <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-            <h3>🎁 Special Offer</h3>
-            <p>Since you reached out, you're eligible for <strong>50% off</strong> your first 3 months when we launch!</p>
-            <p><small>We'll include this discount in our response.</small></p>
           </div>
 
           <div class="debug">
