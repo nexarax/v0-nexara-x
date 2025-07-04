@@ -28,10 +28,9 @@ export default function HomePage() {
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault()
-    e.stopPropagation() // Prevent any bubbling
+    e.stopPropagation()
 
-    if (isSubmitting) return // Prevent double submission
-
+    if (isSubmitting) return
     setIsSubmitting(true)
 
     try {
@@ -40,20 +39,16 @@ export default function HomePage() {
       formData.append("name", name)
       formData.append("source", "homepage")
 
-      console.log("🎯 Homepage waitlist submission:", { email, name })
-
-      const result: ActionResult = await handleWaitlistSignup(formData)
-      console.log("📊 Homepage waitlist result:", result)
+      const result = await handleWaitlistSignup(formData)
 
       if (result.success) {
         toast({
-          title: "Welcome to the waitlist! 🎉",
+          title: "🎉 Welcome to the waitlist!",
           description: result.message || "Check your email for a welcome message.",
         })
         setEmail("")
         setName("")
       } else {
-        console.error("❌ Homepage waitlist failed:", result.error)
         toast({
           title: "Error",
           description: result.error || "Failed to join waitlist. Please try again.",
@@ -61,10 +56,10 @@ export default function HomePage() {
         })
       }
     } catch (error) {
-      console.error("❌ Homepage waitlist exception:", error)
+      console.error("Form submission error:", error)
       toast({
         title: "Error",
-        description: "Failed to join waitlist. Please try again.",
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       })
     } finally {
