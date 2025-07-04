@@ -13,6 +13,14 @@ import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { handleContactForm, handleWaitlistSignup } from "@/app/actions/email-actions"
 
+// Define the expected result type
+interface ActionResult {
+  success: boolean
+  message?: string
+  error?: string
+  debug?: any
+}
+
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isWaitlistSubmitting, setIsWaitlistSubmitting] = useState(false)
@@ -27,34 +35,21 @@ export default function ContactPage() {
       const formData = new FormData(e.currentTarget)
       console.log("🚀 CLIENT: Submitting contact form...")
 
-      const result = await handleContactForm(formData)
+      const result: ActionResult = await handleContactForm(formData)
       console.log("📊 CLIENT: Contact form result:", result)
-      console.log("📊 CLIENT: Result success:", result?.success)
-      console.log("📊 CLIENT: Result message:", result?.message)
-      console.log("📊 CLIENT: Result error:", result?.error)
 
-      // Check if result exists and has success property
-      if (result && typeof result.success === "boolean") {
-        if (result.success) {
-          console.log("✅ CLIENT: Showing success toast")
-          toast({
-            title: "Message sent successfully! ✅",
-            description: result.message || "We'll respond within 24 hours.",
-          })
-          e.currentTarget.reset()
-        } else {
-          console.log("❌ CLIENT: Showing error toast")
-          toast({
-            title: "Error",
-            description: result.error || "Failed to send message. Please try again.",
-            variant: "destructive",
-          })
-        }
+      if (result.success) {
+        console.log("✅ CLIENT: Showing success toast")
+        toast({
+          title: "Message sent successfully! ✅",
+          description: result.message || "We'll respond within 24 hours.",
+        })
+        e.currentTarget.reset()
       } else {
-        console.log("⚠️ CLIENT: Invalid result format:", result)
+        console.log("❌ CLIENT: Showing error toast")
         toast({
           title: "Error",
-          description: "Invalid response format. Please try again.",
+          description: result.error || "Failed to send message. Please try again.",
           variant: "destructive",
         })
       }
@@ -79,35 +74,22 @@ export default function ContactPage() {
       formData.append("source", "contact-page")
       console.log("🎯 CLIENT: Submitting waitlist signup...")
 
-      const result = await handleWaitlistSignup(formData)
+      const result: ActionResult = await handleWaitlistSignup(formData)
       console.log("📊 CLIENT: Waitlist result:", result)
-      console.log("📊 CLIENT: Result success:", result?.success)
-      console.log("📊 CLIENT: Result message:", result?.message)
-      console.log("📊 CLIENT: Result error:", result?.error)
 
-      // Check if result exists and has success property
-      if (result && typeof result.success === "boolean") {
-        if (result.success) {
-          console.log("✅ CLIENT: Showing waitlist success toast")
-          toast({
-            title: "Added to waitlist! 🎉",
-            description: result.message || "Check your email for a welcome message.",
-          })
-          e.currentTarget.reset()
-          setWaitlistName("")
-        } else {
-          console.log("❌ CLIENT: Showing waitlist error toast")
-          toast({
-            title: "Error",
-            description: result.error || "Failed to join waitlist. Please try again.",
-            variant: "destructive",
-          })
-        }
+      if (result.success) {
+        console.log("✅ CLIENT: Showing waitlist success toast")
+        toast({
+          title: "Added to waitlist! 🎉",
+          description: result.message || "Check your email for a welcome message.",
+        })
+        e.currentTarget.reset()
+        setWaitlistName("")
       } else {
-        console.log("⚠️ CLIENT: Invalid waitlist result format:", result)
+        console.log("❌ CLIENT: Showing waitlist error toast")
         toast({
           title: "Error",
-          description: "Invalid response format. Please try again.",
+          description: result.error || "Failed to join waitlist. Please try again.",
           variant: "destructive",
         })
       }
