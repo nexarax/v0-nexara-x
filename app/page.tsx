@@ -12,6 +12,14 @@ import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { handleWaitlistSignup } from "@/app/actions/email-actions"
 
+// Define the expected result type
+interface ActionResult {
+  success: boolean
+  message?: string
+  error?: string
+  debug?: any
+}
+
 export default function HomePage() {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
@@ -30,13 +38,13 @@ export default function HomePage() {
 
       console.log("🎯 Homepage waitlist submission:", email)
 
-      const result = await handleWaitlistSignup(formData)
+      const result: ActionResult = await handleWaitlistSignup(formData)
       console.log("📊 Homepage waitlist result:", result)
 
       if (result.success) {
         toast({
           title: "Welcome to the waitlist! 🎉",
-          description: result.message,
+          description: result.message || "Check your email for a welcome message.",
         })
         setEmail("")
         setName("")
