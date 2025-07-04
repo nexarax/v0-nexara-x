@@ -48,12 +48,12 @@ export default function ContactPage() {
       console.error("❌ Contact form exception:", error)
       toast({
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: "Please try again or email us directly at hello@nexarax.com",
         variant: "destructive",
       })
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
   }
 
   const handleWaitlist = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,12 +87,12 @@ export default function ContactPage() {
       console.error("❌ Waitlist exception:", error)
       toast({
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: "Please try again or email us directly at hello@nexarax.com",
         variant: "destructive",
       })
+    } finally {
+      setIsWaitlistSubmitting(false)
     }
-
-    setIsWaitlistSubmitting(false)
   }
 
   return (
