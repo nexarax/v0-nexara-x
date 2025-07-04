@@ -3,7 +3,7 @@
 import { sendEmail, createContactEmailHTML, createWaitlistEmailHTML } from "@/lib/resend-client"
 
 export async function handleContactForm(formData: FormData) {
-  console.log("🚀 Contact form submission started")
+  console.log("🚀 Professional contact form submission started")
 
   try {
     const firstName = formData.get("firstName") as string
@@ -38,10 +38,12 @@ export async function handleContactForm(formData: FormData) {
       html: createContactEmailHTML(emailData),
     })
 
-    // Trigger automated sequence for the user
-    console.log("🔄 Triggering contact sequence...")
+    // Trigger immediate customer confirmation email
+    console.log("📧 Triggering customer confirmation email...")
     try {
-      await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/email-sequence`, {
+      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+
+      const response = await fetch(`${baseUrl}/api/trigger-email-sequence`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -49,11 +51,17 @@ export async function handleContactForm(formData: FormData) {
           lastName,
           email,
           subject,
+          contactDate: new Date().toISOString(),
         }),
       })
+
+      if (response.ok) {
+        console.log("✅ Customer confirmation email triggered successfully")
+      } else {
+        console.error("⚠️ Customer confirmation trigger failed:", await response.text())
+      }
     } catch (sequenceError) {
-      console.error("⚠️ Sequence trigger failed:", sequenceError)
-      // Don't fail the main form submission if sequence fails
+      console.error("⚠️ Customer confirmation trigger failed:", sequenceError)
     }
 
     console.log("📊 Email send result:", notificationResult)
@@ -61,10 +69,11 @@ export async function handleContactForm(formData: FormData) {
     if (notificationResult.success) {
       return {
         success: true,
-        message: "Message sent successfully! We'll get back to you within 24 hours.",
+        message: "Message sent successfully! You'll receive a confirmation email and we'll respond within 24 hours.",
         debug: {
           emailId: notificationResult.data?.id,
           timestamp: new Date().toISOString(),
+          sequenceType: "professional-contact-3-step",
         },
       }
     } else {
@@ -92,7 +101,7 @@ export async function handleContactForm(formData: FormData) {
 }
 
 export async function handleWaitlistSignup(formData: FormData) {
-  console.log("🎯 Waitlist signup started")
+  console.log("🎯 Professional waitlist signup started")
 
   try {
     const email = formData.get("email") as string
@@ -113,21 +122,29 @@ export async function handleWaitlistSignup(formData: FormData) {
       html: createWaitlistEmailHTML({ email, source }),
     })
 
-    // Trigger automated sequence for the user
-    console.log("🔄 Triggering waitlist sequence...")
+    // Trigger immediate customer welcome email
+    console.log("🎉 Triggering customer welcome email...")
     try {
-      await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/email-sequence`, {
+      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+
+      const response = await fetch(`${baseUrl}/api/trigger-email-sequence`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
           source,
           firstName: email.split("@")[0], // Extract name from email as fallback
+          signupDate: new Date().toISOString(),
         }),
       })
+
+      if (response.ok) {
+        console.log("✅ Customer welcome email triggered successfully")
+      } else {
+        console.error("⚠️ Customer welcome trigger failed:", await response.text())
+      }
     } catch (sequenceError) {
-      console.error("⚠️ Sequence trigger failed:", sequenceError)
-      // Don't fail the main form submission if sequence fails
+      console.error("⚠️ Customer welcome trigger failed:", sequenceError)
     }
 
     console.log("📊 Waitlist email result:", notificationResult)
@@ -135,10 +152,12 @@ export async function handleWaitlistSignup(formData: FormData) {
     if (notificationResult.success) {
       return {
         success: true,
-        message: "Welcome to the waitlist! Check your email for a special welcome message.",
+        message:
+          "Welcome to the waitlist! Check your email for a special welcome message and get ready for an amazing 21-day journey!",
         debug: {
           emailId: notificationResult.data?.id,
           timestamp: new Date().toISOString(),
+          sequenceType: "professional-waitlist-5-step",
         },
       }
     } else {
