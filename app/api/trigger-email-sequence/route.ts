@@ -2,6 +2,32 @@ import { type NextRequest, NextResponse } from "next/server"
 import { sendEmail } from "@/lib/resend-client"
 import { getWaitlistWelcomeTemplate, getContactConfirmationTemplate } from "@/lib/email-templates"
 
+// Add GET method for testing
+export async function GET(request: NextRequest) {
+  return NextResponse.json({
+    success: false,
+    error: "This endpoint only accepts POST requests",
+    message: "Use POST method with JSON data to trigger email sequences",
+    usage: {
+      method: "POST",
+      contentType: "application/json",
+      body: {
+        contact: {
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.com",
+          subject: "Test Subject",
+        },
+        waitlist: {
+          email: "john@example.com",
+          source: "homepage",
+          firstName: "John",
+        },
+      },
+    },
+  })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
@@ -23,8 +49,9 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: "Contact confirmation sent",
+        message: "Contact confirmation sent to customer",
         emailId: result.data?.id,
+        customerEmail: contactData.email,
       })
     } else {
       // WAITLIST SEQUENCE - Send immediate welcome to customer
@@ -42,8 +69,9 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: "Waitlist welcome sent",
+        message: "Waitlist welcome sent to customer",
         emailId: result.data?.id,
+        customerEmail: waitlistData.email,
       })
     }
   } catch (error) {
