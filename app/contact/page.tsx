@@ -17,24 +17,38 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isWaitlistSubmitting, setIsWaitlistSubmitting] = useState(false)
   const { toast } = useToast()
+  const [waitlistName, setWaitlistName] = useState("")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    const formData = new FormData(e.currentTarget)
-    const result = await handleContactForm(formData)
+    try {
+      const formData = new FormData(e.currentTarget)
+      console.log("🚀 Submitting contact form...")
 
-    if (result.success) {
-      toast({
-        title: "Message sent successfully! ✅",
-        description: result.message,
-      })
-      e.currentTarget.reset()
-    } else {
+      const result = await handleContactForm(formData)
+      console.log("📊 Contact form result:", result)
+
+      if (result.success) {
+        toast({
+          title: "Message sent successfully! ✅",
+          description: result.message,
+        })
+        e.currentTarget.reset()
+      } else {
+        console.error("❌ Contact form failed:", result.error)
+        toast({
+          title: "Error",
+          description: result.error || "Failed to send message. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("❌ Contact form exception:", error)
       toast({
         title: "Error",
-        description: result.error,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     }
@@ -46,21 +60,34 @@ export default function ContactPage() {
     e.preventDefault()
     setIsWaitlistSubmitting(true)
 
-    const formData = new FormData(e.currentTarget)
-    formData.append("source", "contact-page")
+    try {
+      const formData = new FormData(e.currentTarget)
+      formData.append("source", "contact-page")
+      console.log("🎯 Submitting waitlist signup...")
 
-    const result = await handleWaitlistSignup(formData)
+      const result = await handleWaitlistSignup(formData)
+      console.log("📊 Waitlist result:", result)
 
-    if (result.success) {
-      toast({
-        title: "Added to waitlist! 🎉",
-        description: result.message,
-      })
-      e.currentTarget.reset()
-    } else {
+      if (result.success) {
+        toast({
+          title: "Added to waitlist! 🎉",
+          description: result.message,
+        })
+        e.currentTarget.reset()
+        setWaitlistName("")
+      } else {
+        console.error("❌ Waitlist failed:", result.error)
+        toast({
+          title: "Error",
+          description: result.error || "Failed to join waitlist. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("❌ Waitlist exception:", error)
       toast({
         title: "Error",
-        description: result.error,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     }
@@ -223,6 +250,14 @@ export default function ContactPage() {
                   </p>
 
                   <form onSubmit={handleWaitlist} className="space-y-3">
+                    <Input
+                      type="text"
+                      name="name"
+                      placeholder="Your first name"
+                      value={waitlistName}
+                      onChange={(e) => setWaitlistName(e.target.value)}
+                      required
+                    />
                     <Input type="email" name="email" placeholder="your@email.com" required />
                     <Button
                       type="submit"
