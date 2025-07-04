@@ -105,9 +105,10 @@ export async function handleWaitlistSignup(formData: FormData) {
 
   try {
     const email = formData.get("email") as string
+    const name = formData.get("name") as string
     const source = (formData.get("source") as string) || "website"
 
-    console.log("📝 Waitlist data:", { email, source })
+    console.log("📝 Waitlist data:", { email, name, source })
 
     if (!email) {
       console.error("❌ Missing email")
@@ -133,7 +134,7 @@ export async function handleWaitlistSignup(formData: FormData) {
         body: JSON.stringify({
           email,
           source,
-          firstName: email.split("@")[0], // Extract name from email as fallback
+          firstName: name, // Use the actual name instead of extracting from email
           signupDate: new Date().toISOString(),
         }),
       })
