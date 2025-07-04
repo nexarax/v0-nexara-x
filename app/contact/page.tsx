@@ -25,27 +25,41 @@ export default function ContactPage() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      console.log("🚀 Submitting contact form...")
+      console.log("🚀 CLIENT: Submitting contact form...")
 
       const result = await handleContactForm(formData)
-      console.log("📊 Contact form result:", result)
+      console.log("📊 CLIENT: Contact form result:", result)
+      console.log("📊 CLIENT: Result success:", result?.success)
+      console.log("📊 CLIENT: Result message:", result?.message)
+      console.log("📊 CLIENT: Result error:", result?.error)
 
-      if (result.success) {
-        toast({
-          title: "Message sent successfully! ✅",
-          description: result.message,
-        })
-        e.currentTarget.reset()
+      // Check if result exists and has success property
+      if (result && typeof result.success === "boolean") {
+        if (result.success) {
+          console.log("✅ CLIENT: Showing success toast")
+          toast({
+            title: "Message sent successfully! ✅",
+            description: result.message || "We'll respond within 24 hours.",
+          })
+          e.currentTarget.reset()
+        } else {
+          console.log("❌ CLIENT: Showing error toast")
+          toast({
+            title: "Error",
+            description: result.error || "Failed to send message. Please try again.",
+            variant: "destructive",
+          })
+        }
       } else {
-        console.error("❌ Contact form failed:", result.error)
+        console.log("⚠️ CLIENT: Invalid result format:", result)
         toast({
           title: "Error",
-          description: result.error || "Failed to send message. Please try again.",
+          description: "Invalid response format. Please try again.",
           variant: "destructive",
         })
       }
     } catch (error) {
-      console.error("❌ Contact form exception:", error)
+      console.error("❌ CLIENT: Contact form exception:", error)
       toast({
         title: "Error",
         description: "Please try again or email us directly at hello@nexarax.com",
@@ -63,28 +77,42 @@ export default function ContactPage() {
     try {
       const formData = new FormData(e.currentTarget)
       formData.append("source", "contact-page")
-      console.log("🎯 Submitting waitlist signup...")
+      console.log("🎯 CLIENT: Submitting waitlist signup...")
 
       const result = await handleWaitlistSignup(formData)
-      console.log("📊 Waitlist result:", result)
+      console.log("📊 CLIENT: Waitlist result:", result)
+      console.log("📊 CLIENT: Result success:", result?.success)
+      console.log("📊 CLIENT: Result message:", result?.message)
+      console.log("📊 CLIENT: Result error:", result?.error)
 
-      if (result.success) {
-        toast({
-          title: "Added to waitlist! 🎉",
-          description: result.message,
-        })
-        e.currentTarget.reset()
-        setWaitlistName("")
+      // Check if result exists and has success property
+      if (result && typeof result.success === "boolean") {
+        if (result.success) {
+          console.log("✅ CLIENT: Showing waitlist success toast")
+          toast({
+            title: "Added to waitlist! 🎉",
+            description: result.message || "Check your email for a welcome message.",
+          })
+          e.currentTarget.reset()
+          setWaitlistName("")
+        } else {
+          console.log("❌ CLIENT: Showing waitlist error toast")
+          toast({
+            title: "Error",
+            description: result.error || "Failed to join waitlist. Please try again.",
+            variant: "destructive",
+          })
+        }
       } else {
-        console.error("❌ Waitlist failed:", result.error)
+        console.log("⚠️ CLIENT: Invalid waitlist result format:", result)
         toast({
           title: "Error",
-          description: result.error || "Failed to join waitlist. Please try again.",
+          description: "Invalid response format. Please try again.",
           variant: "destructive",
         })
       }
     } catch (error) {
-      console.error("❌ Waitlist exception:", error)
+      console.error("❌ CLIENT: Waitlist exception:", error)
       toast({
         title: "Error",
         description: "Please try again or email us directly at hello@nexarax.com",
