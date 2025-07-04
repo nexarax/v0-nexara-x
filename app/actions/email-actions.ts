@@ -30,19 +30,26 @@ export async function handleContactForm(formData: FormData) {
       message,
     }
 
+    let notificationSuccess = false
+    let customerSuccess = false
+
     // Send notification to you
-    console.log("📧 Sending notification email...")
-    const notificationResult = await sendEmail({
-      to: "hello@nexarax.com",
-      subject: `Contact Form: ${subject}`,
-      html: createContactEmailHTML(emailData),
-    })
-
-    console.log("📊 Notification email result:", notificationResult)
-
-    // Send immediate customer confirmation email directly (instead of via API call)
-    console.log("📧 Sending customer confirmation email directly...")
     try {
+      console.log("📧 Sending notification email...")
+      const notificationResult = await sendEmail({
+        to: "hello@nexarax.com",
+        subject: `Contact Form: ${subject}`,
+        html: createContactEmailHTML(emailData),
+      })
+      console.log("📊 Notification email result:", notificationResult)
+      notificationSuccess = notificationResult.success
+    } catch (notificationError) {
+      console.error("⚠️ Notification email error:", notificationError)
+    }
+
+    // Send customer confirmation email
+    try {
+      console.log("📧 Sending customer confirmation email...")
       const { getContactConfirmationTemplate } = await import("@/lib/email-templates")
 
       const customerResult = await sendEmail({
@@ -58,44 +65,33 @@ export async function handleContactForm(formData: FormData) {
       })
 
       console.log("📧 Customer confirmation result:", customerResult)
-
-      if (!customerResult.success) {
-        console.error("⚠️ Customer confirmation failed:", customerResult.error)
-      }
+      customerSuccess = customerResult.success
     } catch (customerError) {
       console.error("⚠️ Customer confirmation error:", customerError)
     }
 
-    if (notificationResult.success) {
+    // Return success if at least one email was sent
+    if (notificationSuccess || customerSuccess) {
       return {
         success: true,
         message: "Message sent successfully! You'll receive a confirmation email and we'll respond within 24 hours.",
         debug: {
-          emailId: notificationResult.data?.id,
+          notificationSent: notificationSuccess,
+          customerSent: customerSuccess,
           timestamp: new Date().toISOString(),
-          sequenceType: "professional-contact-direct",
         },
       }
     } else {
-      console.error("❌ Email send failed:", notificationResult.error)
       return {
         success: false,
-        error: notificationResult.error || "Failed to send message",
-        debug: {
-          details: notificationResult.details,
-          timestamp: new Date().toISOString(),
-        },
+        error: "Failed to send emails. Please try again.",
       }
     }
   } catch (error) {
     console.error("❌ Contact form error:", error)
     return {
       success: false,
-      error: "Server error occurred",
-      debug: {
-        error: error instanceof Error ? error.message : "Unknown error",
-        timestamp: new Date().toISOString(),
-      },
+      error: "An error occurred while sending your message. Please try again.",
     }
   }
 }
