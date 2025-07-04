@@ -91,15 +91,11 @@ export function getWaitlistWelcomeTemplate(data: { email: string; firstName?: st
             </div>
             <div class="benefit-item">
               <span class="checkmark">✅</span>
-              <span><strong>Special Pricing:</strong> 50% off your first 3 months</span>
-            </div>
-            <div class="benefit-item">
-              <span class="checkmark">✅</span>
               <span><strong>Exclusive Updates:</strong> Behind-the-scenes development insights</span>
             </div>
             <div class="benefit-item">
               <span class="checkmark">✅</span>
-              <span><strong>VIP Support:</strong> Direct line to our founding team</span>
+              <span><strong>VIP Support:</strong> Priority support for introduction period</span>
             </div>
             <div class="benefit-item">
               <span class="checkmark">✅</span>
