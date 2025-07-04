@@ -14,6 +14,7 @@ import { handleWaitlistSignup } from "@/app/actions/email-actions"
 
 export default function HomePage() {
   const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
@@ -24,6 +25,7 @@ export default function HomePage() {
     try {
       const formData = new FormData()
       formData.append("email", email)
+      formData.append("name", name)
       formData.append("source", "homepage")
 
       console.log("🎯 Homepage waitlist submission:", email)
@@ -37,6 +39,7 @@ export default function HomePage() {
           description: result.message,
         })
         setEmail("")
+        setName("")
       } else {
         console.error("❌ Homepage waitlist failed:", result.error)
         toast({
@@ -103,6 +106,21 @@ export default function HomePage() {
             <p className="text-slate-600 mb-6">Be the first to experience AI-powered social media management</p>
 
             <form onSubmit={handleWaitlist} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                  First Name
+                </label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Your first name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full"
+                />
+              </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address
