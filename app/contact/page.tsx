@@ -29,28 +29,22 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    e.stopPropagation() // Prevent any bubbling
+    e.stopPropagation()
 
-    if (isSubmitting) return // Prevent double submission
-
+    if (isSubmitting) return
     setIsSubmitting(true)
 
     try {
       const formData = new FormData(e.currentTarget)
-      console.log("🚀 CLIENT: Submitting contact form...")
-
-      const result: ActionResult = await handleContactForm(formData)
-      console.log("📊 CLIENT: Contact form result:", result)
+      const result = await handleContactForm(formData)
 
       if (result.success) {
-        console.log("✅ CLIENT: Showing success toast")
         toast({
-          title: "Message sent successfully! ✅",
+          title: "✅ Message sent successfully!",
           description: result.message || "We'll respond within 24 hours.",
         })
         e.currentTarget.reset()
       } else {
-        console.log("❌ CLIENT: Showing error toast")
         toast({
           title: "Error",
           description: result.error || "Failed to send message. Please try again.",
@@ -58,10 +52,10 @@ export default function ContactPage() {
         })
       }
     } catch (error) {
-      console.error("❌ CLIENT: Contact form exception:", error)
+      console.error("Contact form error:", error)
       toast({
         title: "Error",
-        description: "Please try again or email us directly at hello@nexarax.com",
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -71,26 +65,25 @@ export default function ContactPage() {
 
   const handleWaitlist = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    e.stopPropagation()
+
+    if (isWaitlistSubmitting) return
     setIsWaitlistSubmitting(true)
 
     try {
       const formData = new FormData(e.currentTarget)
       formData.append("source", "contact-page")
-      console.log("🎯 CLIENT: Submitting waitlist signup...")
 
-      const result: ActionResult = await handleWaitlistSignup(formData)
-      console.log("📊 CLIENT: Waitlist result:", result)
+      const result = await handleWaitlistSignup(formData)
 
       if (result.success) {
-        console.log("✅ CLIENT: Showing waitlist success toast")
         toast({
-          title: "Added to waitlist! 🎉",
+          title: "🎉 Added to waitlist!",
           description: result.message || "Check your email for a welcome message.",
         })
         e.currentTarget.reset()
         setWaitlistName("")
       } else {
-        console.log("❌ CLIENT: Showing waitlist error toast")
         toast({
           title: "Error",
           description: result.error || "Failed to join waitlist. Please try again.",
@@ -98,10 +91,10 @@ export default function ContactPage() {
         })
       }
     } catch (error) {
-      console.error("❌ CLIENT: Waitlist exception:", error)
+      console.error("Waitlist form error:", error)
       toast({
         title: "Error",
-        description: "Please try again or email us directly at hello@nexarax.com",
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       })
     } finally {
