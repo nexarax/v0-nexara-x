@@ -28,6 +28,10 @@ export default function HomePage() {
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault()
+    e.stopPropagation() // Prevent any bubbling
+
+    if (isSubmitting) return // Prevent double submission
+
     setIsSubmitting(true)
 
     try {
@@ -36,7 +40,7 @@ export default function HomePage() {
       formData.append("name", name)
       formData.append("source", "homepage")
 
-      console.log("🎯 Homepage waitlist submission:", email)
+      console.log("🎯 Homepage waitlist submission:", { email, name })
 
       const result: ActionResult = await handleWaitlistSignup(formData)
       console.log("📊 Homepage waitlist result:", result)
@@ -113,7 +117,7 @@ export default function HomePage() {
             <h3 className="text-2xl font-bold text-slate-900 mb-2">Join the Waitlist</h3>
             <p className="text-slate-600 mb-6">Be the first to experience AI-powered social media management</p>
 
-            <form onSubmit={handleWaitlist} className="space-y-4">
+            <form onSubmit={handleWaitlist} className="space-y-4" noValidate>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                   First Name
