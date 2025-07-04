@@ -10,38 +10,43 @@ import { Badge } from "@/components/ui/badge"
 import { Check, Zap, BarChart3, Bot, Users, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import { handleWaitlistSignup } from "@/app/actions/email-actions"
 
 export default function HomePage() {
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
-  const handleWaitlistSignup = async (e: React.FormEvent) => {
+  const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      // Simulate API call and log the email data
-      const emailData = {
-        to: "hello@nexarax.com",
-        email: email,
-        source: "homepage",
-        timestamp: new Date().toISOString(),
-        subject: `New Waitlist Signup - ${email}`,
+      const formData = new FormData()
+      formData.append("email", email)
+      formData.append("source", "homepage")
+
+      console.log("🎯 Homepage waitlist submission:", email)
+
+      const result = await handleWaitlistSignup(formData)
+      console.log("📊 Homepage waitlist result:", result)
+
+      if (result.success) {
+        toast({
+          title: "Welcome to the waitlist! 🎉",
+          description: result.message,
+        })
+        setEmail("")
+      } else {
+        console.error("❌ Homepage waitlist failed:", result.error)
+        toast({
+          title: "Error",
+          description: result.error || "Failed to join waitlist. Please try again.",
+          variant: "destructive",
+        })
       }
-
-      console.log("Waitlist Signup:", emailData)
-
-      // Simulate delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      toast({
-        title: "Welcome to the waitlist! 🎉",
-        description: "You'll be the first to know when NexaraX launches.",
-      })
-
-      setEmail("")
     } catch (error) {
+      console.error("❌ Homepage waitlist exception:", error)
       toast({
         title: "Error",
         description: "Failed to join waitlist. Please try again.",
@@ -97,13 +102,14 @@ export default function HomePage() {
             <h3 className="text-2xl font-bold text-slate-900 mb-2">Join the Waitlist</h3>
             <p className="text-slate-600 mb-6">Be the first to experience AI-powered social media management</p>
 
-            <form onSubmit={handleWaitlistSignup} className="space-y-4">
+            <form onSubmit={handleWaitlist} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address
                 </label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="your@email.com"
                   value={email}
