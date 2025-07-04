@@ -5,7 +5,6 @@ import { sendEmail, createContactEmailHTML, createWaitlistEmailHTML } from "@/li
 export async function handleContactForm(formData: FormData) {
   console.log("🚀 Contact form submission started")
 
-  // Wrap everything in a try-catch to prevent any unhandled errors
   try {
     const firstName = formData.get("firstName") as string
     const lastName = formData.get("lastName") as string
@@ -14,62 +13,39 @@ export async function handleContactForm(formData: FormData) {
     const subject = formData.get("subject") as string
     const message = formData.get("message") as string
 
-    console.log("📝 Form data:", { firstName, lastName, email, subject })
+    console.log("📝 Contact form data:", { firstName, lastName, email, subject })
 
     // Validate required fields
     if (!firstName || !lastName || !email || !subject || !message) {
+      console.log("❌ Missing required fields")
       return { success: false, error: "Please fill in all required fields" }
     }
 
-    // Track success of each operation
-    let notificationSent = false
-    let customerSent = false
-    let notificationError = null
-    let customerError = null
+    // Send notification email (to you) - this is the critical one
+    console.log("📧 Sending notification email to hello@nexarax.com...")
+    const notificationResult = await sendEmail({
+      to: "hello@nexarax.com",
+      subject: `Contact Form: ${subject}`,
+      html: createContactEmailHTML({
+        firstName,
+        lastName,
+        email,
+        company,
+        subject,
+        message,
+      }),
+    })
 
-    // Send notification email (to you)
+    console.log("📊 Notification result:", notificationResult)
+
+    // Send customer confirmation (secondary)
+    console.log("📧 Sending customer confirmation...")
+    let customerResult = { success: false, error: "Not attempted" }
+
     try {
-      console.log("📧 Sending notification email...")
-      const notificationResult = await sendEmail({
-        to: "hello@nexarax.com",
-        subject: `Contact Form: ${subject}`,
-        html: createContactEmailHTML({
-          firstName,
-          lastName,
-          email,
-          company,
-          subject,
-          message,
-        }),
-      })
+      const { getContactConfirmationTemplate } = await import("@/lib/email-templates")
 
-      if (notificationResult.success) {
-        notificationSent = true
-        console.log("✅ Notification email sent successfully")
-      } else {
-        notificationError = notificationResult.error
-        console.log("⚠️ Notification email failed:", notificationResult.error)
-      }
-    } catch (error) {
-      notificationError = error instanceof Error ? error.message : "Unknown error"
-      console.log("⚠️ Notification email exception:", notificationError)
-    }
-
-    // Send customer confirmation email
-    try {
-      console.log("📧 Sending customer confirmation...")
-
-      // Import template safely
-      let getContactConfirmationTemplate
-      try {
-        const templates = await import("@/lib/email-templates")
-        getContactConfirmationTemplate = templates.getContactConfirmationTemplate
-      } catch (importError) {
-        console.log("⚠️ Template import failed:", importError)
-        throw new Error("Template import failed")
-      }
-
-      const customerResult = await sendEmail({
+      customerResult = await sendEmail({
         to: email,
         subject: "✅ Message Received - We'll Respond Within 24 Hours",
         html: getContactConfirmationTemplate({
@@ -81,53 +57,40 @@ export async function handleContactForm(formData: FormData) {
         from: "NexaraX <noreply@updates.nexarax.com>",
       })
 
-      if (customerResult.success) {
-        customerSent = true
-        console.log("✅ Customer confirmation sent successfully")
-      } else {
-        customerError = customerResult.error
-        console.log("⚠️ Customer confirmation failed:", customerResult.error)
-      }
-    } catch (error) {
-      customerError = error instanceof Error ? error.message : "Unknown error"
-      console.log("⚠️ Customer confirmation exception:", customerError)
+      console.log("📊 Customer confirmation result:", customerResult)
+    } catch (customerError) {
+      console.log("⚠️ Customer confirmation failed:", customerError)
+      customerResult = { success: false, error: "Customer email failed" }
     }
 
-    // Return success if at least one email was sent successfully
-    if (notificationSent || customerSent) {
-      console.log("🎉 Contact form completed successfully")
+    // SUCCESS CRITERIA: If notification email was sent, consider it a success
+    if (notificationResult.success) {
+      console.log("✅ CONTACT FORM SUCCESS - Notification email sent")
       return {
         success: true,
         message: "Message sent successfully! You'll receive a confirmation email and we'll respond within 24 hours.",
         debug: {
-          notificationSent,
-          customerSent,
-          notificationError,
-          customerError,
+          notificationSent: notificationResult.success,
+          customerSent: customerResult.success,
           timestamp: new Date().toISOString(),
         },
       }
     } else {
-      console.log("❌ Both emails failed")
+      console.log("❌ CONTACT FORM FAILED - Notification email failed")
       return {
         success: false,
         error: "Failed to send message. Please try again or email us directly at hello@nexarax.com",
         debug: {
-          notificationError,
-          customerError,
+          notificationError: notificationResult.error,
+          customerError: customerResult.error,
         },
       }
     }
   } catch (error) {
-    // Catch any unexpected errors
-    console.error("❌ Unexpected contact form error:", error)
+    console.error("❌ Contact form exception:", error)
     return {
       success: false,
-      error: "An error occurred. Please try again or contact us directly at hello@nexarax.com",
-      debug: {
-        unexpectedError: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-      },
+      error: "Please try again or email us directly at hello@nexarax.com",
     }
   }
 }
@@ -135,7 +98,6 @@ export async function handleContactForm(formData: FormData) {
 export async function handleWaitlistSignup(formData: FormData) {
   console.log("🎯 Waitlist signup started")
 
-  // Wrap everything in a try-catch to prevent any unhandled errors
   try {
     const email = formData.get("email") as string
     const name = formData.get("name") as string
@@ -145,55 +107,33 @@ export async function handleWaitlistSignup(formData: FormData) {
 
     // Validate required fields
     if (!email) {
+      console.log("❌ Missing email")
       return { success: false, error: "Please enter your email address" }
     }
 
     if (!name) {
+      console.log("❌ Missing name")
       return { success: false, error: "Please enter your name" }
     }
 
-    // Track success of each operation
-    let notificationSent = false
-    let customerSent = false
-    let notificationError = null
-    let customerError = null
+    // Send notification email (to you) - this is the critical one
+    console.log("📧 Sending waitlist notification to hello@nexarax.com...")
+    const notificationResult = await sendEmail({
+      to: "hello@nexarax.com",
+      subject: `🎉 New Waitlist Signup - ${email}`,
+      html: createWaitlistEmailHTML({ email, source }),
+    })
 
-    // Send notification email (to you)
+    console.log("📊 Waitlist notification result:", notificationResult)
+
+    // Send customer welcome (secondary)
+    console.log("🎉 Sending customer welcome...")
+    let customerResult = { success: false, error: "Not attempted" }
+
     try {
-      console.log("📧 Sending waitlist notification...")
-      const notificationResult = await sendEmail({
-        to: "hello@nexarax.com",
-        subject: `🎉 New Waitlist Signup - ${email}`,
-        html: createWaitlistEmailHTML({ email, source }),
-      })
+      const { getWaitlistWelcomeTemplate } = await import("@/lib/email-templates")
 
-      if (notificationResult.success) {
-        notificationSent = true
-        console.log("✅ Waitlist notification sent successfully")
-      } else {
-        notificationError = notificationResult.error
-        console.log("⚠️ Waitlist notification failed:", notificationResult.error)
-      }
-    } catch (error) {
-      notificationError = error instanceof Error ? error.message : "Unknown error"
-      console.log("⚠️ Waitlist notification exception:", notificationError)
-    }
-
-    // Send customer welcome email
-    try {
-      console.log("🎉 Sending customer welcome...")
-
-      // Import template safely
-      let getWaitlistWelcomeTemplate
-      try {
-        const templates = await import("@/lib/email-templates")
-        getWaitlistWelcomeTemplate = templates.getWaitlistWelcomeTemplate
-      } catch (importError) {
-        console.log("⚠️ Template import failed:", importError)
-        throw new Error("Template import failed")
-      }
-
-      const customerResult = await sendEmail({
+      customerResult = await sendEmail({
         to: email,
         subject: "🎉 Welcome to NexaraX - You're In!",
         html: getWaitlistWelcomeTemplate({
@@ -203,53 +143,40 @@ export async function handleWaitlistSignup(formData: FormData) {
         from: "NexaraX <noreply@updates.nexarax.com>",
       })
 
-      if (customerResult.success) {
-        customerSent = true
-        console.log("✅ Customer welcome sent successfully")
-      } else {
-        customerError = customerResult.error
-        console.log("⚠️ Customer welcome failed:", customerResult.error)
-      }
-    } catch (error) {
-      customerError = error instanceof Error ? error.message : "Unknown error"
-      console.log("⚠️ Customer welcome exception:", customerError)
+      console.log("📊 Customer welcome result:", customerResult)
+    } catch (customerError) {
+      console.log("⚠️ Customer welcome failed:", customerError)
+      customerResult = { success: false, error: "Customer email failed" }
     }
 
-    // Return success if at least one email was sent successfully
-    if (notificationSent || customerSent) {
-      console.log("🎉 Waitlist signup completed successfully")
+    // SUCCESS CRITERIA: If notification email was sent, consider it a success
+    if (notificationResult.success) {
+      console.log("✅ WAITLIST SUCCESS - Notification email sent")
       return {
         success: true,
         message: "Welcome to the waitlist! Check your email for a special welcome message.",
         debug: {
-          notificationSent,
-          customerSent,
-          notificationError,
-          customerError,
+          notificationSent: notificationResult.success,
+          customerSent: customerResult.success,
           timestamp: new Date().toISOString(),
         },
       }
     } else {
-      console.log("❌ Both emails failed")
+      console.log("❌ WAITLIST FAILED - Notification email failed")
       return {
         success: false,
         error: "Failed to join waitlist. Please try again or email us at hello@nexarax.com",
         debug: {
-          notificationError,
-          customerError,
+          notificationError: notificationResult.error,
+          customerError: customerResult.error,
         },
       }
     }
   } catch (error) {
-    // Catch any unexpected errors
-    console.error("❌ Unexpected waitlist error:", error)
+    console.error("❌ Waitlist exception:", error)
     return {
       success: false,
-      error: "An error occurred. Please try again or email us directly at hello@nexarax.com",
-      debug: {
-        unexpectedError: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-      },
+      error: "Please try again or email us directly at hello@nexarax.com",
     }
   }
 }
