@@ -29,6 +29,10 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    e.stopPropagation() // Prevent any bubbling
+
+    if (isSubmitting) return // Prevent double submission
+
     setIsSubmitting(true)
 
     try {
@@ -156,7 +160,7 @@ export default function ContactPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="firstName" className="block text-sm font-medium text-slate-700 mb-2">
@@ -259,7 +263,7 @@ export default function ContactPage() {
                     NexaraX is currently in development. Contact us to be notified when we launch!
                   </p>
 
-                  <form onSubmit={handleWaitlist} className="space-y-3">
+                  <form onSubmit={handleWaitlist} className="space-y-3" noValidate>
                     <Input
                       type="text"
                       name="name"
