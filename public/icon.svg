@@ -1,9 +1,9 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Blue-to-purple gradient left to right -->
+  <!-- Rounded rectangle with blue-to-purple gradient (left to right) -->
   <rect width="32" height="32" rx="6" fill="url(#logoGradient)"/>
   
-  <!-- Lightning bolt OUTLINE only (hollow center) - mirrored and rotated correctly -->
-  <path d="M18 6L10 16H14V26L22 16H18V6Z" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Lucide Zap icon - solid white lightning bolt -->
+  <path d="M18.5 6L10 16h4l-1 10 8.5-10h-4l1-10z" fill="white"/>
   
   <defs>
     <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
