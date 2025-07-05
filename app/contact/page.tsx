@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,9 +26,13 @@ export default function ContactPage() {
     try {
       const formData = new FormData(e.currentTarget)
 
-      // Import the server action dynamically to avoid build issues
-      const { handleContactForm } = await import("@/app/actions/email-actions")
-      const result = await handleContactForm(formData)
+      // Direct API call instead of server action
+      const response = await fetch("/api/contact-form", {
+        method: "POST",
+        body: formData,
+      })
+
+      const result = await response.json()
 
       if (result?.success) {
         toast({
@@ -64,11 +67,14 @@ export default function ContactPage() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      formData.append("source", "contact-page")
 
-      // Import the server action dynamically to avoid build issues
-      const { handleWaitlistSignup } = await import("@/app/actions/email-actions")
-      const result = await handleWaitlistSignup(formData)
+      // Direct API call instead of server action
+      const response = await fetch("/api/waitlist-signup", {
+        method: "POST",
+        body: formData,
+      })
+
+      const result = await response.json()
 
       if (result?.success) {
         toast({
