@@ -11,34 +11,27 @@ import { Badge } from "@/components/ui/badge"
 import { Zap, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
-import { handleContactForm, handleWaitlistSignup } from "@/app/actions/email-actions"
-
-// Define the expected result type
-interface ActionResult {
-  success: boolean
-  message?: string
-  error?: string
-  debug?: any
-}
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isWaitlistSubmitting, setIsWaitlistSubmitting] = useState(false)
-  const { toast } = useToast()
   const [waitlistName, setWaitlistName] = useState("")
+  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    e.stopPropagation()
 
     if (isSubmitting) return
     setIsSubmitting(true)
 
     try {
       const formData = new FormData(e.currentTarget)
+
+      // Import the server action dynamically to avoid build issues
+      const { handleContactForm } = await import("@/app/actions/email-actions")
       const result = await handleContactForm(formData)
 
-      if (result.success) {
+      if (result?.success) {
         toast({
           title: "✅ Message sent successfully!",
           description: result.message || "We'll respond within 24 hours.",
@@ -47,7 +40,7 @@ export default function ContactPage() {
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to send message. Please try again.",
+          description: result?.error || "Failed to send message. Please try again.",
           variant: "destructive",
         })
       }
@@ -55,7 +48,7 @@ export default function ContactPage() {
       console.error("Contact form error:", error)
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: "Something went wrong. Please try again or email us directly at hello@nexarax.com",
         variant: "destructive",
       })
     } finally {
@@ -65,7 +58,6 @@ export default function ContactPage() {
 
   const handleWaitlist = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    e.stopPropagation()
 
     if (isWaitlistSubmitting) return
     setIsWaitlistSubmitting(true)
@@ -74,9 +66,11 @@ export default function ContactPage() {
       const formData = new FormData(e.currentTarget)
       formData.append("source", "contact-page")
 
+      // Import the server action dynamically to avoid build issues
+      const { handleWaitlistSignup } = await import("@/app/actions/email-actions")
       const result = await handleWaitlistSignup(formData)
 
-      if (result.success) {
+      if (result?.success) {
         toast({
           title: "🎉 Added to waitlist!",
           description: result.message || "Check your email for a welcome message.",
@@ -86,7 +80,7 @@ export default function ContactPage() {
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to join waitlist. Please try again.",
+          description: result?.error || "Failed to join waitlist. Please try again.",
           variant: "destructive",
         })
       }
@@ -153,19 +147,19 @@ export default function ContactPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                  <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="firstName" className="block text-sm font-medium text-slate-700 mb-2">
                           First Name
                         </label>
-                        <Input id="firstName" name="firstName" placeholder="John" required />
+                        <Input id="firstName" name="firstName" placeholder="John" required disabled={isSubmitting} />
                       </div>
                       <div>
                         <label htmlFor="lastName" className="block text-sm font-medium text-slate-700 mb-2">
                           Last Name
                         </label>
-                        <Input id="lastName" name="lastName" placeholder="Doe" required />
+                        <Input id="lastName" name="lastName" placeholder="Doe" required disabled={isSubmitting} />
                       </div>
                     </div>
 
@@ -173,21 +167,34 @@ export default function ContactPage() {
                       <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                         Email
                       </label>
-                      <Input id="email" name="email" type="email" placeholder="john@example.com" required />
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="john@example.com"
+                        required
+                        disabled={isSubmitting}
+                      />
                     </div>
 
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
                         Company (Optional)
                       </label>
-                      <Input id="company" name="company" placeholder="Your Company" />
+                      <Input id="company" name="company" placeholder="Your Company" disabled={isSubmitting} />
                     </div>
 
                     <div>
                       <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-2">
                         Subject
                       </label>
-                      <Input id="subject" name="subject" placeholder="How can we help you?" required />
+                      <Input
+                        id="subject"
+                        name="subject"
+                        placeholder="How can we help you?"
+                        required
+                        disabled={isSubmitting}
+                      />
                     </div>
 
                     <div>
@@ -200,6 +207,7 @@ export default function ContactPage() {
                         placeholder="Tell us more about your needs..."
                         rows={6}
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
 
@@ -256,7 +264,7 @@ export default function ContactPage() {
                     NexaraX is currently in development. Contact us to be notified when we launch!
                   </p>
 
-                  <form onSubmit={handleWaitlist} className="space-y-3" noValidate>
+                  <form onSubmit={handleWaitlist} className="space-y-3">
                     <Input
                       type="text"
                       name="name"
@@ -264,8 +272,15 @@ export default function ContactPage() {
                       value={waitlistName}
                       onChange={(e) => setWaitlistName(e.target.value)}
                       required
+                      disabled={isWaitlistSubmitting}
                     />
-                    <Input type="email" name="email" placeholder="your@email.com" required />
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="your@email.com"
+                      required
+                      disabled={isWaitlistSubmitting}
+                    />
                     <Button
                       type="submit"
                       className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
